@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"io/ioutil"
+	"io"
 
 	"github.com/syurchen93/api-football-client/request"
 	"github.com/syurchen93/api-football-client/response"
@@ -64,7 +64,7 @@ func (c *Client) doRequest(requestObject request.RequestInterface) response.Resp
 	}
 
 	defer httpResponse.Body.Close()
-	responseBody, err := ioutil.ReadAll(httpResponse.Body)
+	responseBody, err := io.ReadAll(httpResponse.Body)
 	if err != nil {
 		panic(fmt.Sprintf("Error reading API response: %v", err))
 	}
