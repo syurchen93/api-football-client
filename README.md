@@ -1,6 +1,8 @@
 Module Api Football Client
 =================
 
+A go lang SDK for [API Football](https://www.api-football.com/documentation-v3)
+
 Usage example:
 ```go
 package main
