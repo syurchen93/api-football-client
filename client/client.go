@@ -38,7 +38,7 @@ func (c *Client) SetApiHost(apiHost string) {
 	c.apiHost = apiHost
 }
 
-func (c *Client) doRequest(requestObject request.RequestInterface) response.ResponseInterface {
+func (c *Client) DoRequest(requestObject request.RequestInterface) response.ResponseInterface {
 	requestBody, err := json.Marshal(requestObject)
 	if err != nil {
 		panic(fmt.Sprintf("Error serializing the request struct: %v", err))
