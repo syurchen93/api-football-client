@@ -38,15 +38,15 @@ func (c *Client) SetApiHost(apiHost string) {
 	c.apiHost = apiHost
 }
 
-func (c *Client) DoRequest(requestObject request.RequestInterface) response.ResponseInterface {
-	requestBody, err := json.Marshal(requestObject)
+func (c *Client) DoRequest(requestStruct request.RequestInterface) response.ResponseInterface {
+	requestBody, err := json.Marshal(requestStruct)
 	if err != nil {
 		panic(fmt.Sprintf("Error serializing the request struct: %v", err))
 	}
 
 	httpRequest, err := http.NewRequest(
 		"GET", 
-		c.baseURL + requestObject.GetEndpoint(), 
+		c.baseURL + requestStruct.GetEndpoint(), 
 		bytes.NewReader(requestBody),
 	)
 	if err != nil {
@@ -69,7 +69,13 @@ func (c *Client) DoRequest(requestObject request.RequestInterface) response.Resp
 		panic(fmt.Sprintf("Error reading API response: %v", err))
 	}
 
-	fmt.Println(string(responseBody))
+	responseStruct := response.Response{}
 
-	return responseBody
+	jsonErr := json.Unmarshal(responseBody, &responseStruct)
+
+	if jsonErr != nil {
+		panic(fmt.Sprintf("Error parsing json response: %v", jsonErr))
+	}
+
+	return responseStruct
 }
