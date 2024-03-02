@@ -1,12 +1,10 @@
 package response
 
-import "github.com/syurchen93/api-football-client/response/league"
-
 type Response struct {
 	Errors []Error `json:"errors"`
 	Results int `json:"results"`
 	Paging Paging `json:"paging"`
-	Response []league.Country `json:"response"`
+	ResponseMap []interface{} `json:"response"`
 }
 
 type Error struct {

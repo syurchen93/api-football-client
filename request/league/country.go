@@ -1,5 +1,10 @@
 package league
 
+import (
+	"github.com/syurchen93/api-football-client/response/league"
+	"github.com/syurchen93/api-football-client/response"
+)
+
 type Country struct {
 	Name string `json:"name"`
 	Code string `validate:"len=2" json:"code"`
@@ -8,4 +13,8 @@ type Country struct {
 
 func (c Country) GetEndpoint() string {
 	return "countries"
+}
+
+func (c Country) GetResponseStruct() response.ResponseInterface {
+	return league.Country{}
 }

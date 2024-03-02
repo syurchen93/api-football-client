@@ -9,6 +9,8 @@ import (
 
 	"github.com/syurchen93/api-football-client/request"
 	"github.com/syurchen93/api-football-client/response"
+
+	"github.com/mitchellh/mapstructure"
 )
 
 var baseURL = "https://v3.football.api-sports.io/"
@@ -77,5 +79,12 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) response.Resp
 		panic(fmt.Sprintf("Error parsing json response: %v", jsonErr))
 	}
 
-	return responseStruct
+	endResponses := make([]response.ResponseInterface, 0)
+	for _, responseMap := range responseStruct.ResponseMap {
+		emptyResponseStruct := requestStruct.GetResponseStruct()
+		mapstructure.Decode(responseMap, &emptyResponseStruct)
+		endResponses = append(endResponses, emptyResponseStruct)
+	}
+
+	return endResponses
 }

@@ -1,7 +1,7 @@
 package league
 
 type Country struct {
-	Name string `json:"name"`
-	Code string `json:"code"`
-	Flag string `json:"flag"`
+	Name string `mapstructure:"name"`
+	Code string `mapstructure:"code"`
+	Flag string `mapstructure:"flag"`
 }
