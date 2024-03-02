@@ -41,7 +41,7 @@ func (c *Client) SetApiHost(apiHost string) {
 func (c *Client) doRequest(requestObject request.RequestInterface) response.ResponseInterface {
 	requestBody, err := json.Marshal(requestObject)
 	if err != nil {
-		panic(fmt.Sprintf("Error serializing the request struct", err))
+		panic(fmt.Sprintf("Error serializing the request struct: %v", err))
 	}
 
 	httpRequest, err := http.NewRequest(
@@ -50,23 +50,23 @@ func (c *Client) doRequest(requestObject request.RequestInterface) response.Resp
 		bytes.NewReader(requestBody),
 	)
 	if err != nil {
-		panic(fmt.Sprintf("Failed to initialize http client!", err))
+		panic(fmt.Sprintf("Failed to initialize http client: %v", err))
 	}
 	httpRequest.Header.Add("x-rapidapi-host", c.apiHost)
 	httpRequest.Header.Add("x-rapidapi-key", c.apiKey)
 
 	httpResponse, err := c.httpClient.Do(httpRequest)
 	if err != nil {
-		panic(fmt.Sprintf("Error fetching API response", err))
+		panic(fmt.Sprintf("Error fetching API response: %v", err))
 	}
 	if httpResponse.StatusCode != 200 {
-		panic(fmt.Sprintf("API response code is not 200", err))
+		panic(fmt.Sprintf("API response code is not 200: %v", err))
 	}
 
 	defer httpResponse.Body.Close()
 	responseBody, err := ioutil.ReadAll(httpResponse.Body)
 	if err != nil {
-		panic(fmt.Sprintf("Error reading API response", err))
+		panic(fmt.Sprintf("Error reading API response: %v", err))
 	}
 
 	fmt.Println(string(responseBody))
