@@ -1,20 +1,22 @@
 package client
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"io"
+	"net/http"
+	"net/url"
 
 	"github.com/syurchen93/api-football-client/request"
 	"github.com/syurchen93/api-football-client/response"
 
 	"github.com/mitchellh/mapstructure"
+	"github.com/go-playground/validator/v10"
 )
 
 var baseURL = "https://v3.football.api-sports.io/"
 var apiHost = "v3.football.api-sports.io"
+var validate *validator.Validate
 
 type Client struct {
 	apiKey string
@@ -24,6 +26,8 @@ type Client struct {
 }
 
 func NewClient(apiKey string) *Client {
+	validate = validator.New(validator.WithRequiredStructEnabled())
+
 	return &Client{
 		apiKey: apiKey,
 		baseURL: baseURL,
@@ -40,16 +44,23 @@ func (c *Client) SetApiHost(apiHost string) {
 	c.apiHost = apiHost
 }
 
-func (c *Client) DoRequest(requestStruct request.RequestInterface) response.ResponseInterface {
-	requestBody, err := json.Marshal(requestStruct)
+func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.ResponseInterface, error) {
+	err := validate.Struct(requestStruct)
 	if err != nil {
-		panic(fmt.Sprintf("Error serializing the request struct: %v", err))
+		return nil, err
+	}
+
+	requestUrlWithParams, err := c.prepareUrlWithParams(requestStruct)
+	fmt.Println(requestUrlWithParams)
+
+	if err != nil {
+		return nil, err
 	}
 
 	httpRequest, err := http.NewRequest(
 		"GET", 
-		c.baseURL + requestStruct.GetEndpoint(), 
-		bytes.NewReader(requestBody),
+		requestUrlWithParams, 
+		nil,
 	)
 	if err != nil {
 		panic(fmt.Sprintf("Failed to initialize http client: %v", err))
@@ -59,10 +70,10 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) response.Resp
 
 	httpResponse, err := c.httpClient.Do(httpRequest)
 	if err != nil {
-		panic(fmt.Sprintf("Error fetching API response: %v", err))
+		return nil, err
 	}
 	if httpResponse.StatusCode != 200 {
-		panic(fmt.Sprintf("API response code is not 200: %v", err))
+		return nil, err
 	}
 
 	defer httpResponse.Body.Close()
@@ -71,12 +82,43 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) response.Resp
 		panic(fmt.Sprintf("Error reading API response: %v", err))
 	}
 
+	return mapResponseToCorrectStruct(responseBody, requestStruct)
+}
+
+func (c Client) prepareUrlWithParams(requestStruct request.RequestInterface) (string, error) {
+	urlStruct, err := url.Parse(c.baseURL + requestStruct.GetEndpoint())
+	curQuery := urlStruct.Query()
+
+	if err != nil {
+		return "", err
+	}
+
+	var queryToAdd map[string]string
+	jsonTemp, jsonErr := json.Marshal(requestStruct)
+	if jsonErr != nil {
+		return "", jsonErr
+	}
+
+	json.Unmarshal(jsonTemp, &queryToAdd)
+	for key, value := range queryToAdd {
+		curQuery.Add(key, value)
+	}
+
+	urlStruct.RawQuery = curQuery.Encode()
+
+	return urlStruct.String(), nil
+}
+
+func mapResponseToCorrectStruct(
+		responseBody []byte, 
+		requestStruct request.RequestInterface,
+	) ([]response.ResponseInterface, error) {
 	responseStruct := response.Response{}
 
 	jsonErr := json.Unmarshal(responseBody, &responseStruct)
 
 	if jsonErr != nil {
-		panic(fmt.Sprintf("Error parsing json response: %v", jsonErr))
+		return nil, jsonErr
 	}
 
 	endResponses := make([]response.ResponseInterface, 0)
@@ -86,5 +128,5 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) response.Resp
 		endResponses = append(endResponses, emptyResponseStruct)
 	}
 
-	return endResponses
+	return endResponses, nil
 }
