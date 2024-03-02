@@ -6,6 +6,6 @@ type Country struct {
 	Search string `validate:"len=3" json:"search"`
 }
 
-func (c Country) getEndpoint() string {
+func (c Country) GetEndpoint() string {
 	return "countries"
 }

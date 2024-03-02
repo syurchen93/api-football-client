@@ -1,10 +1,14 @@
 package client
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"io/ioutil"
+
 	"github.com/syurchen93/api-football-client/request"
 	"github.com/syurchen93/api-football-client/response"
-	"net/http"
-	"encoding/json"
 )
 
 var baseURL = "https://v3.football.api-sports.io/"
@@ -34,33 +38,38 @@ func (c *Client) SetApiHost(apiHost string) {
 	c.apiHost = apiHost
 }
 
-func (c *Client) doRequest(request request.RequestInterface) response.ResponseInterface {
-	httpRequest, err := c.httpClient.NewRequest(
+func (c *Client) doRequest(requestObject request.RequestInterface) response.ResponseInterface {
+	requestBody, err := json.Marshal(requestObject)
+	if err != nil {
+		panic(fmt.Sprintf("Error serializing the request struct", err))
+	}
+
+	httpRequest, err := http.NewRequest(
 		"GET", 
-		c.baseURL + request.getEndpoint(), 
-		json.Marshal(request),
+		c.baseURL + requestObject.GetEndpoint(), 
+		bytes.NewReader(requestBody),
 	)
 	if err != nil {
-		panic("Failed to initialize http client!", err)
+		panic(fmt.Sprintf("Failed to initialize http client!", err))
 	}
 	httpRequest.Header.Add("x-rapidapi-host", c.apiHost)
 	httpRequest.Header.Add("x-rapidapi-key", c.apiKey)
 
-	httpResponse, err := httpClient.Do(request)
+	httpResponse, err := c.httpClient.Do(httpRequest)
 	if err != nil {
-		panic("Error fetching API response", err)
+		panic(fmt.Sprintf("Error fetching API response", err))
 	}
-	httpResponse.Code != 200 {
-		panic("API response code is not 200", err)
+	if httpResponse.StatusCode != 200 {
+		panic(fmt.Sprintf("API response code is not 200", err))
 	}
 
 	defer httpResponse.Body.Close()
 	responseBody, err := ioutil.ReadAll(httpResponse.Body)
 	if err != nil {
-		panic("Error reading API response", err)
+		panic(fmt.Sprintf("Error reading API response", err))
 	}
 
 	fmt.Println(string(responseBody))
 
-	return response.ResponseInterface{}
+	return responseBody
 }
