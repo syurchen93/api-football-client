@@ -1,4 +1,4 @@
-module api-football-client
+module github.com/syurchen93/api-football-client
 
 go 1.21.6
 

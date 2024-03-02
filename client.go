@@ -1,8 +1,8 @@
 package client
 
 import (
-	"api-football-client/request"
-	"api-football-client/response"
+	"github.com/syurchen93/api-football-client/request"
+	"github.com/syurchen93/api-football-client/response"
 	"net/http"
 	"encoding/json"
 )
