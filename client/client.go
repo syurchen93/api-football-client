@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	//"os"
 
 	"github.com/syurchen93/api-football-client/request"
 	"github.com/syurchen93/api-football-client/response"
@@ -77,6 +78,7 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 
 	defer httpResponse.Body.Close()
 	responseBody, err := io.ReadAll(httpResponse.Body)
+	//os.WriteFile("test/response/countries-full.json", responseBody, 0644)
 	if err != nil {
 		return nil, err
 	}
