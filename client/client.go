@@ -51,7 +51,6 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 	}
 
 	requestUrlWithParams, err := c.prepareUrlWithParams(requestStruct)
-	fmt.Println(requestUrlWithParams)
 
 	if err != nil {
 		return nil, err
