@@ -99,7 +99,11 @@ func (c Client) prepareUrlWithParams(requestStruct request.RequestInterface) (st
 		return "", jsonErr
 	}
 
-	json.Unmarshal(jsonTemp, &queryToAdd)
+	err = json.Unmarshal(jsonTemp, &queryToAdd)
+	if err != nil {
+		return "", err
+	}
+
 	for key, value := range queryToAdd {
 		curQuery.Add(key, value)
 	}
@@ -124,8 +128,10 @@ func mapResponseToCorrectStruct(
 	endResponses := make([]response.ResponseInterface, 0)
 	for _, responseMap := range responseStruct.ResponseMap {
 		emptyResponseStruct := requestStruct.GetResponseStruct()
-		mapstructure.Decode(responseMap, &emptyResponseStruct)
-		endResponses = append(endResponses, emptyResponseStruct)
+		err := mapstructure.Decode(responseMap, &emptyResponseStruct)
+		if err == nil {
+			endResponses = append(endResponses, emptyResponseStruct)
+		}
 	}
 
 	return endResponses, nil
