@@ -114,9 +114,9 @@ func (c Client) prepareUrlWithParams(requestStruct request.RequestInterface) (st
 }
 
 func mapResponseToCorrectStruct(
-		responseBody []byte, 
-		requestStruct request.RequestInterface,
-	) ([]response.ResponseInterface, error) {
+	responseBody []byte, 
+	requestStruct request.RequestInterface,
+) ([]response.ResponseInterface, error) {
 	responseStruct := response.Response{}
 
 	jsonErr := json.Unmarshal(responseBody, &responseStruct)
@@ -126,11 +126,27 @@ func mapResponseToCorrectStruct(
 	}
 
 	endResponses := make([]response.ResponseInterface, 0)
+	responseChan := make(chan response.ResponseInterface)
+	errorChan := make(chan error)
+
 	for _, responseMap := range responseStruct.ResponseMap {
-		emptyResponseStruct := requestStruct.GetResponseStruct()
-		err := mapstructure.Decode(responseMap, &emptyResponseStruct)
-		if err == nil {
-			endResponses = append(endResponses, emptyResponseStruct)
+		go func(rm interface{}) {
+			emptyResponseStruct := requestStruct.GetResponseStruct()
+			err := mapstructure.Decode(rm, &emptyResponseStruct)
+			if err != nil {
+				errorChan <- err
+			} else {
+				responseChan <- emptyResponseStruct
+			}
+		}(responseMap)
+	}
+
+	for range responseStruct.ResponseMap {
+		select {
+		case response := <-responseChan:
+			endResponses = append(endResponses, response)
+		case err := <-errorChan:
+			return nil, err
 		}
 	}
 
