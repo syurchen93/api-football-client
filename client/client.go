@@ -62,7 +62,7 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 		nil,
 	)
 	if err != nil {
-		panic(fmt.Sprintf("Failed to initialize http client: %v", err))
+		return nil, err
 	}
 	httpRequest.Header.Add("x-rapidapi-host", c.apiHost)
 	httpRequest.Header.Add("x-rapidapi-key", c.apiKey)
@@ -72,13 +72,13 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 		return nil, err
 	}
 	if httpResponse.StatusCode != 200 {
-		return nil, err
+		return nil, fmt.Errorf("request failed with status code: %d", httpResponse.StatusCode)
 	}
 
 	defer httpResponse.Body.Close()
 	responseBody, err := io.ReadAll(httpResponse.Body)
 	if err != nil {
-		panic(fmt.Sprintf("Error reading API response: %v", err))
+		return nil, err
 	}
 
 	return mapResponseToCorrectStruct(responseBody, requestStruct)
