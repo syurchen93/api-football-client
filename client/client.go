@@ -78,7 +78,7 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 
 	defer httpResponse.Body.Close()
 	responseBody, err := io.ReadAll(httpResponse.Body)
-	//os.WriteFile("test/response/countries-full.json", responseBody, 0644)
+	//os.WriteFile("test/response/countries-one.json", responseBody, 0644)
 	if err != nil {
 		return nil, err
 	}

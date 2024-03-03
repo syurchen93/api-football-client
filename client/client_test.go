@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"fmt"
 	"sort"
+	"strings"
 	"crypto/md5"
 	"encoding/json"
 	"github.com/syurchen93/api-football-client/request/league"
@@ -19,6 +20,7 @@ var resultFolder string = "../test/result/"
 type testRequestStruct struct {
 	RequestStruct request.RequestInterface 
 	SnapshotName string
+	RequestUrlWithoutHost string
 }
 
 func TestNewClient(t *testing.T) {
@@ -49,15 +51,21 @@ func TestSetApiHost(t *testing.T) {
 
 func TestDoRequest(t *testing.T) {
 	var requestsToTest = []testRequestStruct {
-		 {
+		{
 			RequestStruct: league.Country{},
 			SnapshotName: "countries-full.json",
+			RequestUrlWithoutHost: "/countries",
+		},
+		{
+			RequestStruct: league.Country{Code: "US"},
+			SnapshotName: "countries-one.json",
+			RequestUrlWithoutHost: "/countries?code=US",
 		},
 	}
 
 	for _, requestToTest := range requestsToTest {
 		resultFilePath := resultFolder + requestToTest.SnapshotName 
-		actualResponse, err := mockRequest(t, requestToTest.SnapshotName, requestToTest.RequestStruct)
+		actualResponse, err := mockRequest(t, requestToTest)
 		if err != nil {
 			t.Fatalf("Error from DoRequest: %s", err)
 		}
@@ -88,12 +96,8 @@ func TestDoRequest(t *testing.T) {
 	}
 }
 
-func mockRequest(
-	t *testing.T,
-	responseFileName string, 
-	requestStruct request.RequestInterface,
-	) ([]response.ResponseInterface, error) {
-	responseContent, err := os.ReadFile(responseFolder + responseFileName)
+func mockRequest(t *testing.T, testRequesData testRequestStruct) ([]response.ResponseInterface, error) {
+	responseContent, err := os.ReadFile(responseFolder + testRequesData.SnapshotName)
 	if err != nil {
 		t.Fatalf("Error reading file: %s", err)
 	}
@@ -107,8 +111,18 @@ func mockRequest(
 	apiClient := NewClient("test")
 	apiClient.baseURL = ts.URL + "/"
 	apiClient.httpClient = ts.Client()
-	
-	return apiClient.DoRequest(requestStruct)
+
+	actualUrl, err := apiClient.prepareUrlWithParams(testRequesData.RequestStruct)
+	if err != nil {
+		return nil, err
+	}
+	actualUrl = strings.Replace(actualUrl, ts.URL, "", 1)
+
+	if testRequesData.RequestUrlWithoutHost != actualUrl {
+		t.Errorf("Expected url %s, got %s", testRequesData.RequestUrlWithoutHost, actualUrl)
+	}
+
+	return apiClient.DoRequest(testRequesData.RequestStruct)
 }
 
 func sortSliceByHash (slice []response.ResponseInterface) {

@@ -1,0 +1,1 @@
+{"get":"countries","parameters":{"code":"US"},"errors":[],"results":1,"paging":{"current":1,"total":1},"response":[{"name":"USA","code":"US","flag":"https:\/\/media.api-sports.io\/flags\/us.svg"}]}
