@@ -61,6 +61,11 @@ func TestDoRequest(t *testing.T) {
 			SnapshotName: "countries-one.json",
 			RequestUrlWithoutHost: "/countries?code=US",
 		},
+		{
+			RequestStruct: league.League{Current: "true", CountryCode: "DE"},
+			SnapshotName: "leagues-current-de.json",
+			RequestUrlWithoutHost: "/leagues?code=DE&current=true",
+		},
 	}
 
 	for _, requestToTest := range requestsToTest {

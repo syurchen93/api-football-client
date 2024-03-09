@@ -7,6 +7,9 @@ import (
 	"net/http"
 	"net/url"
 	//"os"
+	"time"
+	"reflect"
+	"strings"
 
 	"github.com/syurchen93/api-football-client/request"
 	"github.com/syurchen93/api-football-client/response"
@@ -78,7 +81,7 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 
 	defer httpResponse.Body.Close()
 	responseBody, err := io.ReadAll(httpResponse.Body)
-	//os.WriteFile("test/response/countries-one.json", responseBody, 0644)
+	//os.WriteFile("test/response/leagues-current-de.json", responseBody, 0644)
 	if err != nil {
 		return nil, err
 	}
@@ -133,7 +136,7 @@ func mapResponseToCorrectStruct(
 	for _, responseMap := range responseStruct.ResponseMap {
 		go func(rm interface{}) {
 			emptyResponseStruct := requestStruct.GetResponseStruct()
-			err := mapstructure.Decode(rm, &emptyResponseStruct)
+			err := Decode(rm, &emptyResponseStruct)
 			if err != nil {
 				errorChan <- err
 			} else {
@@ -152,4 +155,48 @@ func mapResponseToCorrectStruct(
 	}
 
 	return endResponses, nil
+}
+
+
+func Decode(input interface{}, result interface{}) error {
+	decoder, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
+		Metadata: nil,
+		DecodeHook: mapstructure.ComposeDecodeHookFunc(
+			ToTimeHookFunc()),
+		Result: result,
+	})
+	if err != nil {
+		return err
+	}
+
+	if err := decoder.Decode(input); err != nil {
+		return err
+	}
+	return err
+}
+
+func ToTimeHookFunc() mapstructure.DecodeHookFunc {
+	return func(
+		f reflect.Type,
+		t reflect.Type,
+		data interface{}) (interface{}, error) {
+		if t != reflect.TypeOf(time.Time{}) {
+			return data, nil
+		}
+
+		switch f.Kind() {
+		case reflect.String:
+			if (strings.Contains(data.(string), "T")) {
+				return time.Parse(time.RFC3339, data.(string))
+			} else {
+				return time.Parse("2006-01-02", data.(string))
+			}
+		case reflect.Float64:
+			return time.Unix(0, int64(data.(float64))*int64(time.Millisecond)), nil
+		case reflect.Int64:
+			return time.Unix(0, data.(int64)*int64(time.Millisecond)), nil
+		default:
+			return data, nil
+		}
+	}
 }
