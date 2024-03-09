@@ -11,6 +11,7 @@ import (
 	"crypto/md5"
 	"encoding/json"
 	"github.com/syurchen93/api-football-client/request/league"
+	"github.com/syurchen93/api-football-client/request/team"
 	"github.com/syurchen93/api-football-client/response"
 	"github.com/syurchen93/api-football-client/request"
 )
@@ -70,6 +71,11 @@ func TestDoRequest(t *testing.T) {
 			RequestStruct: league.Season{},
 			SnapshotName: "seasons.json",
 			RequestUrlWithoutHost: "/leagues/seasons",
+		},
+		{
+			RequestStruct: team.Team{Search: "Manchester"},
+			SnapshotName: "team-manchester.json",
+			RequestUrlWithoutHost: "/teams?search=Manchester",
 		},
 	}
 
