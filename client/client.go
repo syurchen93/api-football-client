@@ -13,6 +13,7 @@ import (
 
 	"github.com/syurchen93/api-football-client/request"
 	"github.com/syurchen93/api-football-client/response"
+	"github.com/syurchen93/api-football-client/response/league"
 
 	"github.com/mitchellh/mapstructure"
 	"github.com/go-playground/validator/v10"
@@ -81,7 +82,7 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 
 	defer httpResponse.Body.Close()
 	responseBody, err := io.ReadAll(httpResponse.Body)
-	//os.WriteFile("test/response/leagues-current-de.json", responseBody, 0644)
+	//os.WriteFile("test/response/seasons.json", responseBody, 0644)
 	if err != nil {
 		return nil, err
 	}
@@ -180,23 +181,28 @@ func ToTimeHookFunc() mapstructure.DecodeHookFunc {
 		f reflect.Type,
 		t reflect.Type,
 		data interface{}) (interface{}, error) {
-		if t != reflect.TypeOf(time.Time{}) {
-			return data, nil
+
+		if t == reflect.TypeOf(league.SeasonYear{}) {
+			return league.SeasonYear{Year: int(data.(float64))}, nil
 		}
 
-		switch f.Kind() {
-		case reflect.String:
-			if (strings.Contains(data.(string), "T")) {
-				return time.Parse(time.RFC3339, data.(string))
-			} else {
-				return time.Parse("2006-01-02", data.(string))
+		if t == reflect.TypeOf(time.Time{}) {
+			switch f.Kind() {
+			case reflect.String:
+				if (strings.Contains(data.(string), "T")) {
+					return time.Parse(time.RFC3339, data.(string))
+				} else {
+					return time.Parse("2006-01-02", data.(string))
+				}
+			case reflect.Float64:
+				return time.Unix(0, int64(data.(float64))*int64(time.Millisecond)), nil
+			case reflect.Int64:
+				return time.Unix(0, data.(int64)*int64(time.Millisecond)), nil
+			default:
+				return data, nil
 			}
-		case reflect.Float64:
-			return time.Unix(0, int64(data.(float64))*int64(time.Millisecond)), nil
-		case reflect.Int64:
-			return time.Unix(0, data.(int64)*int64(time.Millisecond)), nil
-		default:
-			return data, nil
 		}
+
+		return data, nil
 	}
 }
