@@ -1,0 +1,1 @@
+{"get":"teams","parameters":{"league":"39","search":"Leipzig"},"errors":{"league":"The League field cannot be used with the Search field."},"results":0,"paging":{"current":1,"total":1},"response":[]}

@@ -6,16 +6,16 @@ import (
 )
 
 type League struct {
-	ID      int    `json:"id,omitempty"`
-	Name    string `json:"name,omitempty"`
-	CountryName string `json:"country,omitempty"`
-	CountryCode    string `json:"code,omitempty" validate:"omitempty,len=2"`
-	Season  int    `json:"season,omitempty" validate:"omitempty,gte=1000,lte=9999"`
-	Team    int    `json:"team,omitempty"`
-	Type    string `json:"type,omitempty" validate:"omitempty,oneof=league cup"`
-	Current string `json:"current,omitempty" validate:"omitempty,oneof=true false"`
-	Search  string `json:"search,omitempty" validate:"omitempty,min=3"`
-	Last    int    `json:"last,omitempty" validate:"omitempty,max=99"`
+	ID      int    `mapstructure:"id,omitempty"`
+	Name    string `mapstructure:"name,omitempty"`
+	CountryName string `mapstructure:"country,omitempty"`
+	CountryCode    string `mapstructure:"code,omitempty" validate:"omitempty,len=2"`
+	Season  int    `mapstructure:"season,omitempty" validate:"omitempty,gte=1000,lte=9999"`
+	Team    int    `mapstructure:"team,omitempty"`
+	Type    string `mapstructure:"type,omitempty" validate:"omitempty,oneof=league cup"`
+	Current string `mapstructure:"current,omitempty" validate:"omitempty,oneof=true false"`
+	Search  string `mapstructure:"search,omitempty" validate:"omitempty,min=3"`
+	Last    int    `mapstructure:"last,omitempty" validate:"omitempty,max=99"`
 }
 
 func (l League) GetEndpoint() string {

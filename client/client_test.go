@@ -14,6 +14,7 @@ import (
 	"github.com/syurchen93/api-football-client/request/team"
 	"github.com/syurchen93/api-football-client/response"
 	"github.com/syurchen93/api-football-client/request"
+	//"time"
 )
 
 var responseFolder string = "../test/response/"
@@ -22,6 +23,7 @@ type testRequestStruct struct {
 	RequestStruct request.RequestInterface 
 	SnapshotName string
 	RequestUrlWithoutHost string
+	ExpectError bool
 }
 
 func TestNewClient(t *testing.T) {
@@ -77,19 +79,35 @@ func TestDoRequest(t *testing.T) {
 			SnapshotName: "team-manchester.json",
 			RequestUrlWithoutHost: "/teams?search=Manchester",
 		},
+		{
+			RequestStruct: team.Team{League: 39, Search: "Leipzig"},
+			SnapshotName: "team-leipzig-error.json",
+			RequestUrlWithoutHost: "/teams?league=39&search=Leipzig",
+			ExpectError: true,
+		},
+		{
+			RequestStruct: team.Statistics{League: 78, Team: 173, Season: 2022},
+			SnapshotName: "team-stats-leipzig.json",
+			RequestUrlWithoutHost: "/teams/statistics?league=78&season=2022&team=173",
+		},
 	}
 
 	for _, requestToTest := range requestsToTest {
+		var actualResponseJson []byte
 		resultFilePath := resultFolder + requestToTest.SnapshotName 
 		actualResponse, err := mockRequest(t, requestToTest)
 		if err != nil {
-			t.Fatalf("Error from DoRequest: %s", err)
-		}
-
-		sortSliceByHash(actualResponse)
-		actualResponseJson, err := json.Marshal(actualResponse)
-		if err != nil {
-			t.Fatalf("Error serializing response: %s", err)
+			if requestToTest.ExpectError {
+				actualResponseJson = []byte(err.Error())
+			} else {
+				t.Fatalf("Error from DoRequest: %s", err)
+			}
+		} else {
+			sortSliceByHash(actualResponse)
+			actualResponseJson, err = json.Marshal(actualResponse)
+			if err != nil {
+				t.Fatalf("Error serializing response: %s", err)
+			}
 		}
 
 		if _, err := os.Stat(resultFilePath); os.IsNotExist(err) {
@@ -135,7 +153,7 @@ func mockRequest(t *testing.T, testRequesData testRequestStruct) ([]response.Res
 	actualUrl = strings.Replace(actualUrl, ts.URL, "", 1)
 
 	if testRequesData.RequestUrlWithoutHost != actualUrl {
-		t.Errorf("Expected url %s, got %s", testRequesData.RequestUrlWithoutHost, actualUrl)
+		t.Fatalf("Expected url %s, got %s", testRequesData.RequestUrlWithoutHost, actualUrl)
 	}
 
 	return apiClient.DoRequest(testRequesData.RequestStruct)

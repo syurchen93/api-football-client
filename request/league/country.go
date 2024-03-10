@@ -6,9 +6,9 @@ import (
 )
 
 type Country struct {
-	Name string `json:"name,omitempty"`
-	Code string `validate:"omitempty,len=2" json:"code,omitempty"`
-	Search string `validate:"omitempty,len=3" json:"search,omitempty"`
+	Name string `mapstructure:"name,omitempty"`
+	Code string `validate:"omitempty,len=2" mapstructure:"code,omitempty"`
+	Search string `validate:"omitempty,len=3" mapstructure:"search,omitempty"`
 }
 
 func (c Country) GetEndpoint() string {

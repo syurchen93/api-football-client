@@ -82,7 +82,7 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 
 	defer httpResponse.Body.Close()
 	responseBody, err := io.ReadAll(httpResponse.Body)
-	//os.WriteFile("test/response/team-manchester.json", responseBody, 0644)
+	//os.WriteFile("test/response/team-stats-leipzig.json", responseBody, 0644)
 	if err != nil {
 		return nil, err
 	}
@@ -98,19 +98,22 @@ func (c Client) prepareUrlWithParams(requestStruct request.RequestInterface) (st
 		return "", err
 	}
 
-	var queryToAdd map[string]string
-	jsonTemp, jsonErr := json.Marshal(requestStruct)
-	if jsonErr != nil {
-		return "", jsonErr
-	}
+	var queryToAdd map[string]interface{}
 
-	err = json.Unmarshal(jsonTemp, &queryToAdd)
+	err = Decode(requestStruct, &queryToAdd)
 	if err != nil {
 		return "", err
 	}
 
 	for key, value := range queryToAdd {
-		curQuery.Add(key, value)
+		var valueToAdd string
+		switch value := value.(type) {
+			case int:
+				valueToAdd = fmt.Sprintf("%d", value)
+			case string:
+				valueToAdd = value
+		}
+		curQuery.Add(key, valueToAdd)
 	}
 
 	urlStruct.RawQuery = curQuery.Encode()
@@ -130,11 +133,27 @@ func mapResponseToCorrectStruct(
 		return nil, jsonErr
 	}
 
+	switch responseStruct.Errors.(type) {
+		case []interface{}:
+		case map[string]interface{}:
+			if len(responseStruct.Errors.(map[string]interface{})) > 0 {
+				return nil, fmt.Errorf("API returned errors: %v", responseStruct.Errors)
+			}
+	}
+
+	var responseMap []interface{}
+	switch responseStruct.ResponseMap.(type) {
+		case []interface{}:
+			responseMap = responseStruct.ResponseMap.([]interface{})
+		case interface{}:
+			responseMap = append(responseMap, responseStruct.ResponseMap)
+	}
+
 	endResponses := make([]response.ResponseInterface, 0)
 	responseChan := make(chan response.ResponseInterface)
 	errorChan := make(chan error)
 
-	for _, responseMap := range responseStruct.ResponseMap {
+	for _, responseMap := range responseMap {
 		go func(rm interface{}) {
 			emptyResponseStruct := requestStruct.GetResponseStruct()
 			err := Decode(rm, &emptyResponseStruct)
@@ -146,7 +165,7 @@ func mapResponseToCorrectStruct(
 		}(responseMap)
 	}
 
-	for range responseStruct.ResponseMap {
+	for range responseMap {
 		select {
 		case response := <-responseChan:
 			endResponses = append(endResponses, response)
@@ -163,7 +182,8 @@ func Decode(input interface{}, result interface{}) error {
 	decoder, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
 		Metadata: nil,
 		DecodeHook: mapstructure.ComposeDecodeHookFunc(
-			ToTimeHookFunc()),
+			ToTimeHookFunc(),
+		),
 		Result: result,
 	})
 	if err != nil {
@@ -188,19 +208,19 @@ func ToTimeHookFunc() mapstructure.DecodeHookFunc {
 
 		if t == reflect.TypeOf(time.Time{}) {
 			switch f.Kind() {
-			case reflect.String:
-				if (strings.Contains(data.(string), "T")) {
-					return time.Parse(time.RFC3339, data.(string))
-				} else {
-					return time.Parse("2006-01-02", data.(string))
+				case reflect.String:
+					if (strings.Contains(data.(string), "T")) {
+						return time.Parse(time.RFC3339, data.(string))
+					} else {
+						return time.Parse("2006-01-02", data.(string))
+					}
+				case reflect.Float64:
+					return time.Unix(0, int64(data.(float64))*int64(time.Millisecond)), nil
+				case reflect.Int64:
+					return time.Unix(0, data.(int64)*int64(time.Millisecond)), nil
+				default:
+					return data, nil
 				}
-			case reflect.Float64:
-				return time.Unix(0, int64(data.(float64))*int64(time.Millisecond)), nil
-			case reflect.Int64:
-				return time.Unix(0, data.(int64)*int64(time.Millisecond)), nil
-			default:
-				return data, nil
-			}
 		}
 
 		return data, nil
