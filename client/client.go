@@ -14,6 +14,7 @@ import (
 	"github.com/syurchen93/api-football-client/request"
 	"github.com/syurchen93/api-football-client/response"
 	"github.com/syurchen93/api-football-client/response/league"
+	"github.com/syurchen93/api-football-client/response/misc"
 
 	"github.com/mitchellh/mapstructure"
 	"github.com/go-playground/validator/v10"
@@ -82,7 +83,7 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 
 	defer httpResponse.Body.Close()
 	responseBody, err := io.ReadAll(httpResponse.Body)
-	//os.WriteFile("test/response/team-stats-leipzig.json", responseBody, 0644)
+	//os.WriteFile("test/response/timezones.json", responseBody, 0644)
 	if err != nil {
 		return nil, err
 	}
@@ -204,6 +205,9 @@ func ToTimeHookFunc() mapstructure.DecodeHookFunc {
 
 		if t == reflect.TypeOf(league.SeasonYear{}) {
 			return league.SeasonYear{Year: int(data.(float64))}, nil
+		}
+		if t == reflect.TypeOf(misc.Timezone{}) {
+			return misc.Timezone{Value: data.(string)}, nil
 		}
 
 		if t == reflect.TypeOf(time.Time{}) {

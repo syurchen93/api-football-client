@@ -12,6 +12,7 @@ import (
 	"encoding/json"
 	"github.com/syurchen93/api-football-client/request/league"
 	"github.com/syurchen93/api-football-client/request/team"
+	"github.com/syurchen93/api-football-client/request/misc"
 	"github.com/syurchen93/api-football-client/response"
 	"github.com/syurchen93/api-football-client/request"
 	//"time"
@@ -89,6 +90,11 @@ func TestDoRequest(t *testing.T) {
 			RequestStruct: team.Statistics{League: 78, Team: 173, Season: 2022},
 			SnapshotName: "team-stats-leipzig.json",
 			RequestUrlWithoutHost: "/teams/statistics?league=78&season=2022&team=173",
+		},
+		{
+			RequestStruct: misc.Timezone{},
+			SnapshotName: "timezones.json",
+			RequestUrlWithoutHost: "/timezone",
 		},
 	}
 
