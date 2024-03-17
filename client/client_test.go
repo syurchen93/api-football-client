@@ -114,6 +114,17 @@ func TestDoRequest(t *testing.T) {
 			SnapshotName: "team-countries.json",
 			RequestUrlWithoutHost: "/teams/countries",
 		},
+		{
+			RequestStruct: misc.Venue{Search: "Nou", Country: "Spain"},
+			SnapshotName: "venue-camp-nou-error.json",
+			RequestUrlWithoutHost: "/venues?country=Spain&search=Nou",
+			ExpectError: true,
+		},
+		{
+			RequestStruct: misc.Venue{Search: "Nou"},
+			SnapshotName: "venue-camp-nou.json",
+			RequestUrlWithoutHost: "/venues?search=Nou",
+		},
 	}
 
 	for _, requestToTest := range requestsToTest {
