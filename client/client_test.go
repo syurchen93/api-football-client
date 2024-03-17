@@ -16,8 +16,8 @@ import (
 	"github.com/syurchen93/api-football-client/request/league"
 	"github.com/syurchen93/api-football-client/request/misc"
 	"github.com/syurchen93/api-football-client/request/team"
+	"github.com/syurchen93/api-football-client/request/standings"
 	"github.com/syurchen93/api-football-client/response"
-	//"time"
 )
 
 var responseFolder string = "../test/response/"
@@ -124,6 +124,11 @@ func TestDoRequest(t *testing.T) {
 			RequestStruct: misc.Venue{Search: "Nou"},
 			SnapshotName: "venue-camp-nou.json",
 			RequestUrlWithoutHost: "/venues?search=Nou",
+		},
+		{
+			RequestStruct: standings.Standings{Season: 2022, League: 39},
+			SnapshotName: "standings-epl-2022.json",
+			RequestUrlWithoutHost: "/standings?league=39&season=2022",
 		},
 	}
 
