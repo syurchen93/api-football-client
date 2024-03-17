@@ -1,20 +1,22 @@
 package client
 
 import (
-	"os"
-	"testing"
-	"net/http/httptest"
-	"net/http"
-	"fmt"
-	"sort"
-	"strings"
 	"crypto/md5"
 	"encoding/json"
-	"github.com/syurchen93/api-football-client/request/league"
-	"github.com/syurchen93/api-football-client/request/team"
-	"github.com/syurchen93/api-football-client/request/misc"
-	"github.com/syurchen93/api-football-client/response"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"os"
+	"sort"
+	"strings"
+	"testing"
+	"time"
+
 	"github.com/syurchen93/api-football-client/request"
+	"github.com/syurchen93/api-football-client/request/league"
+	"github.com/syurchen93/api-football-client/request/misc"
+	"github.com/syurchen93/api-football-client/request/team"
+	"github.com/syurchen93/api-football-client/response"
 	//"time"
 )
 
@@ -90,6 +92,12 @@ func TestDoRequest(t *testing.T) {
 			RequestStruct: team.Statistics{League: 78, Team: 173, Season: 2022},
 			SnapshotName: "team-stats-leipzig.json",
 			RequestUrlWithoutHost: "/teams/statistics?league=78&season=2022&team=173",
+		},
+		{
+			RequestStruct: team.Statistics{League: 78, Team: 173, Season: 2022, 
+				LimitDate: time.Date(2022, 1, 1, 0, 0, 0, 0, time.UTC)},
+			SnapshotName: "team-stats-leipzig-2022.json",
+			RequestUrlWithoutHost: "/teams/statistics?date=2022-01-01&league=78&season=2022&team=173",
 		},
 		{
 			RequestStruct: misc.Timezone{},
