@@ -104,6 +104,11 @@ func TestDoRequest(t *testing.T) {
 			SnapshotName: "timezones.json",
 			RequestUrlWithoutHost: "/timezone",
 		},
+		{
+			RequestStruct: team.Season{Team: 33},
+			SnapshotName: "team-seasons-mu.json",
+			RequestUrlWithoutHost: "/teams/seasons?team=33",
+		},
 	}
 
 	for _, requestToTest := range requestsToTest {
