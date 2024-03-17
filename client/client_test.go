@@ -109,6 +109,11 @@ func TestDoRequest(t *testing.T) {
 			SnapshotName: "team-seasons-mu.json",
 			RequestUrlWithoutHost: "/teams/seasons?team=33",
 		},
+		{
+			RequestStruct: team.Country{},
+			SnapshotName: "team-countries.json",
+			RequestUrlWithoutHost: "/teams/countries",
+		},
 	}
 
 	for _, requestToTest := range requestsToTest {
