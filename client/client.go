@@ -14,9 +14,12 @@ import (
 
 	"github.com/syurchen93/api-football-client/request"
 	"github.com/syurchen93/api-football-client/request/team"
+	"github.com/syurchen93/api-football-client/request/fixture"
+	"github.com/syurchen93/api-football-client/request/league"
 	"github.com/syurchen93/api-football-client/response"
-	"github.com/syurchen93/api-football-client/response/league"
+	"github.com/syurchen93/api-football-client/response/leagues"
 	"github.com/syurchen93/api-football-client/response/misc"
+	"github.com/syurchen93/api-football-client/response/fixtures"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/mitchellh/mapstructure"
@@ -85,7 +88,7 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 
 	defer httpResponse.Body.Close()
 	responseBody, err := io.ReadAll(httpResponse.Body)
-	//os.WriteFile("test/response/standings-bundesliga-2022.json", responseBody, 0644)
+	//os.WriteFile("test/response/rounds-2021-cl.json", responseBody, 0644)
 	if err != nil {
 		return nil, err
 	}
@@ -219,12 +222,67 @@ func ToTimeHookFunc() mapstructure.DecodeHookFunc {
 			}
 			return response, nil
 		}
+		if f == reflect.TypeOf(fixture.Round{}) {
+			response := map[string]interface{} {
+				"league": data.(fixture.Round).League,
+				"season": data.(fixture.Round).Season,
+				"current": boolToString(data.(fixture.Round).Current),
+			}
 
-		if t == reflect.TypeOf(league.SeasonYear{}) {
-			return league.SeasonYear{Year: int(data.(float64))}, nil
+			return response, nil
+		}
+		if f == reflect.TypeOf(league.League{}) {
+			response := map[string]interface{} {
+				"id": data.(league.League).ID,
+				"name": data.(league.League).Name,
+				"country": data.(league.League).CountryName,
+				"code": data.(league.League).CountryCode,
+				"season": data.(league.League).Season,
+				"team": data.(league.League).Team,
+				"type": data.(league.League).Type,
+				"current": boolToString(data.(league.League).Current),
+				"search": data.(league.League).Search,
+				"last": data.(league.League).Last,
+			}
+			if (data.(league.League).ID == 0) {
+				delete(response, "id")
+			}
+			if (data.(league.League).Name == "") {
+				delete(response, "name")
+			}
+			if (data.(league.League).CountryName == "") {
+				delete(response, "country")
+			}
+			if (data.(league.League).CountryCode == "") {
+				delete(response, "code")
+			}
+			if (data.(league.League).Season == 0) {
+				delete(response, "season")
+			}
+			if (data.(league.League).Team == 0) {
+				delete(response, "team")
+			}
+			if (data.(league.League).Type == "") {
+				delete(response, "type")
+			}
+			if (data.(league.League).Search == "") {
+				delete(response, "search")
+			}
+			if (data.(league.League).Last == 0) {
+				delete(response, "last")
+			}
+			return response, nil
+		}
+
+
+		if t == reflect.TypeOf(leagues.SeasonYear{}) {
+			return leagues.SeasonYear{Year: int(data.(float64))}, nil
 		}
 		if t == reflect.TypeOf(misc.Timezone{}) {
 			return misc.Timezone{Value: data.(string)}, nil
+		}
+		if t == reflect.TypeOf(fixtures.Round{}) {
+			return fixtures.Round{Name: data.(string)}, nil
 		}
 
 		if t == reflect.TypeOf(time.Time{}) {
@@ -246,4 +304,11 @@ func ToTimeHookFunc() mapstructure.DecodeHookFunc {
 
 		return data, nil
 	}
+}
+
+func boolToString(b bool) string {
+	if b {
+		return "true"
+	}
+	return "false"
 }

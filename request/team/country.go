@@ -2,7 +2,7 @@ package team
 
 import (
 	"github.com/syurchen93/api-football-client/response"
-	"github.com/syurchen93/api-football-client/response/league"
+	"github.com/syurchen93/api-football-client/response/leagues"
 )
 
 type Country struct {
@@ -13,5 +13,5 @@ func (c Country) GetEndpoint() string {
 }
 
 func (c Country) GetResponseStruct() response.ResponseInterface {
-	return league.Country{}
+	return leagues.Country{}
 }

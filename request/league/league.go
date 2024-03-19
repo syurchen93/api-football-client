@@ -2,7 +2,7 @@ package league
 
 import (
 	"github.com/syurchen93/api-football-client/response"
-	"github.com/syurchen93/api-football-client/response/league"
+	"github.com/syurchen93/api-football-client/response/leagues"
 )
 
 type League struct {
@@ -13,7 +13,7 @@ type League struct {
 	Season  int    `mapstructure:"season,omitempty" validate:"omitempty,gte=1000,lte=9999"`
 	Team    int    `mapstructure:"team,omitempty"`
 	Type    string `mapstructure:"type,omitempty" validate:"omitempty,oneof=league cup"`
-	Current string `mapstructure:"current,omitempty" validate:"omitempty,oneof=true false"`
+	Current bool `mapstructure:"current,omitempty" validate:"omitempty"`
 	Search  string `mapstructure:"search,omitempty" validate:"omitempty,min=3"`
 	Last    int    `mapstructure:"last,omitempty" validate:"omitempty,max=99"`
 }
@@ -23,5 +23,5 @@ func (l League) GetEndpoint() string {
 }
 
 func (l League) GetResponseStruct() response.ResponseInterface {
-	return league.LeagueData{}
+	return leagues.LeagueData{}
 }

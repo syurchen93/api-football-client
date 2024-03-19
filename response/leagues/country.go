@@ -1,4 +1,4 @@
-package league
+package leagues
 
 type Country struct {
 	Name string `mapstructure:"name"`

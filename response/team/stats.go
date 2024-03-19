@@ -1,11 +1,11 @@
 package team
 
 import (
-	"github.com/syurchen93/api-football-client/response/league"
+	"github.com/syurchen93/api-football-client/response/leagues"
 )
 
 type Statistics struct {
-	League  league.League  `json:"league"`
+	League  leagues.League  `json:"league"`
 	Team    Team    `json:"team"`
 	FormString string  `json:"form" mapstructure:"form"`
 	Fixtures Fixtures `json:"fixtures"`

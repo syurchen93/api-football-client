@@ -1,4 +1,4 @@
-package league
+package leagues
 
 import (
 	"time"
@@ -11,21 +11,21 @@ type LeagueData struct {
 }
 
 type League struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+	ID      int    `json:"id"`
+	Name    string `json:"name"`
 	Country string `json:"country,omitempty"`
-	Type string `json:"type"`
-	Logo string `json:"logo"`
+	Type    string `json:"type"`
+	Logo    string `json:"logo"`
 	Flag    string `json:"flag,omitempty"`
 	Season  int    `json:"season,omitempty"`
 }
 
 type Season struct {
-	Year     int    `json:"year"`
+	Year     int       `json:"year"`
 	Start    time.Time `json:"start"`
 	End      time.Time `json:"end"`
-	Current  bool   `json:"current"`
-	Coverage Coverage `json:"coverage"`
+	Current  bool      `json:"current"`
+	Coverage Coverage  `json:"coverage"`
 }
 
 type Coverage struct {

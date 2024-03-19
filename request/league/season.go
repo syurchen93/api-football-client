@@ -2,7 +2,7 @@ package league
 
 import (
 	"github.com/syurchen93/api-football-client/response"
-	"github.com/syurchen93/api-football-client/response/league"
+	"github.com/syurchen93/api-football-client/response/leagues"
 )
 
 type Season struct {
@@ -13,5 +13,5 @@ func (s Season) GetEndpoint() string {
 }
 
 func (s Season) GetResponseStruct() response.ResponseInterface {
-	return league.SeasonYear{}
+	return leagues.SeasonYear{}
 }

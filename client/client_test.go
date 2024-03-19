@@ -17,6 +17,7 @@ import (
 	"github.com/syurchen93/api-football-client/request/misc"
 	"github.com/syurchen93/api-football-client/request/team"
 	"github.com/syurchen93/api-football-client/request/standings"
+	"github.com/syurchen93/api-football-client/request/fixture"
 	"github.com/syurchen93/api-football-client/response"
 )
 
@@ -68,7 +69,7 @@ func TestDoRequest(t *testing.T) {
 			RequestUrlWithoutHost: "/countries?code=US",
 		},
 		{
-			RequestStruct: league.League{Current: "true", CountryCode: "DE"},
+			RequestStruct: league.League{Current: true, CountryCode: "DE"},
 			SnapshotName: "leagues-current-de.json",
 			RequestUrlWithoutHost: "/leagues?code=DE&current=true",
 		},
@@ -129,6 +130,11 @@ func TestDoRequest(t *testing.T) {
 			RequestStruct: standings.Standings{Season: 2022, League: 39},
 			SnapshotName: "standings-epl-2022.json",
 			RequestUrlWithoutHost: "/standings?league=39&season=2022",
+		},
+		{
+			RequestStruct: fixture.Round{League: 2, Season: 2021, Current: false},
+			SnapshotName: "rounds-2021-cl.json",
+			RequestUrlWithoutHost: "/fixtures/rounds?current=false&league=2&season=2021",
 		},
 	}
 
