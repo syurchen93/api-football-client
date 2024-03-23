@@ -13,9 +13,6 @@ import (
 	"time"
 
 	"github.com/syurchen93/api-football-client/request"
-	"github.com/syurchen93/api-football-client/request/team"
-	"github.com/syurchen93/api-football-client/request/fixture"
-	"github.com/syurchen93/api-football-client/request/league"
 	"github.com/syurchen93/api-football-client/response"
 	"github.com/syurchen93/api-football-client/response/leagues"
 	"github.com/syurchen93/api-football-client/response/misc"
@@ -28,6 +25,7 @@ import (
 var baseURL = "https://v3.football.api-sports.io/"
 var apiHost = "v3.football.api-sports.io"
 var validate *validator.Validate
+var timeFormatShort = "2006-01-02"
 
 type Client struct {
 	apiKey string
@@ -104,22 +102,18 @@ func (c Client) prepareUrlWithParams(requestStruct request.RequestInterface) (st
 		return "", err
 	}
 
-	var queryToAdd map[string]interface{}
+	var queryToAddTemp map[string]interface{}
 
-	err = Decode(requestStruct, &queryToAdd)
+	err = Decode(requestStruct, &queryToAddTemp)
 	if err != nil {
 		return "", err
 	}
+	queryToAdd := stringifyMapContent(queryToAddTemp)
 
 	for key, value := range queryToAdd {
-		var valueToAdd string
-		switch value := value.(type) {
-			case int:
-				valueToAdd = fmt.Sprintf("%d", value)
-			case string:
-				valueToAdd = value
+		if value != "" {
+			curQuery.Add(key, value)
 		}
-		curQuery.Add(key, valueToAdd)
 	}
 
 	urlStruct.RawQuery = curQuery.Encode()
@@ -209,72 +203,6 @@ func ToTimeHookFunc() mapstructure.DecodeHookFunc {
 		t reflect.Type,
 		data interface{}) (interface{}, error) {
 
-		if f == reflect.TypeOf(team.Statistics{}) {
-			response := map[string]interface{} {
-				"season": data.(team.Statistics).Season,
-				"team": data.(team.Statistics).Team,
-				"league": data.(team.Statistics).League,
-				"date": data.(team.Statistics).LimitDate.Format("2006-01-02"),
-			}
-
-			if (data.(team.Statistics).LimitDate.IsZero()) {
-				delete(response, "date")
-			}
-			return response, nil
-		}
-		if f == reflect.TypeOf(fixture.Round{}) {
-			response := map[string]interface{} {
-				"league": data.(fixture.Round).League,
-				"season": data.(fixture.Round).Season,
-				"current": boolToString(data.(fixture.Round).Current),
-			}
-
-			return response, nil
-		}
-		if f == reflect.TypeOf(league.League{}) {
-			response := map[string]interface{} {
-				"id": data.(league.League).ID,
-				"name": data.(league.League).Name,
-				"country": data.(league.League).CountryName,
-				"code": data.(league.League).CountryCode,
-				"season": data.(league.League).Season,
-				"team": data.(league.League).Team,
-				"type": data.(league.League).Type,
-				"current": boolToString(data.(league.League).Current),
-				"search": data.(league.League).Search,
-				"last": data.(league.League).Last,
-			}
-			if (data.(league.League).ID == 0) {
-				delete(response, "id")
-			}
-			if (data.(league.League).Name == "") {
-				delete(response, "name")
-			}
-			if (data.(league.League).CountryName == "") {
-				delete(response, "country")
-			}
-			if (data.(league.League).CountryCode == "") {
-				delete(response, "code")
-			}
-			if (data.(league.League).Season == 0) {
-				delete(response, "season")
-			}
-			if (data.(league.League).Team == 0) {
-				delete(response, "team")
-			}
-			if (data.(league.League).Type == "") {
-				delete(response, "type")
-			}
-			if (data.(league.League).Search == "") {
-				delete(response, "search")
-			}
-			if (data.(league.League).Last == 0) {
-				delete(response, "last")
-			}
-			return response, nil
-		}
-
-
 		if t == reflect.TypeOf(leagues.SeasonYear{}) {
 			return leagues.SeasonYear{Year: int(data.(float64))}, nil
 		}
@@ -291,7 +219,7 @@ func ToTimeHookFunc() mapstructure.DecodeHookFunc {
 					if (strings.Contains(data.(string), "T")) {
 						return time.Parse(time.RFC3339, data.(string))
 					} else {
-						return time.Parse("2006-01-02", data.(string))
+						return time.Parse(timeFormatShort, data.(string))
 					}
 				case reflect.Float64:
 					return time.Unix(0, int64(data.(float64))*int64(time.Millisecond)), nil
@@ -301,9 +229,41 @@ func ToTimeHookFunc() mapstructure.DecodeHookFunc {
 					return data, nil
 				}
 		}
+		if f.String() == "*time.Time" {
+			return map[string]time.Time {
+				"date": *data.(*time.Time),
+			}, nil
+		}
 
 		return data, nil
 	}
+}
+
+func stringifyMapContent(mapData map[string]interface{}) map[string]string {
+	stringifiedMap := make(map[string]string)
+
+	for key, value := range mapData {
+		var stringValue string
+		switch value := value.(type) {
+			case bool:
+				stringValue = boolToString(value)
+			case string:
+				stringValue = value
+			case int:
+				stringValue = fmt.Sprintf("%d", value)
+			case time.Time:
+				stringValue = value.Format(timeFormatShort)
+			case map[string]interface{}:
+				dateValue, ok := value["date"]
+				if ok && !dateValue.(time.Time).IsZero() {
+					stringValue = dateValue.(time.Time).Format(timeFormatShort)
+				}
+		}
+
+		stringifiedMap[key] = stringValue
+	}
+
+	return stringifiedMap
 }
 
 func boolToString(b bool) string {
