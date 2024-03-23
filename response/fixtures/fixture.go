@@ -26,8 +26,8 @@ type FixtureDetails struct {
 }
 
 type Periods struct {
-	First  time.Time `json:"first"`
-	Second time.Time `json:"second"`
+	First  int `json:"first"`
+	Second int `json:"second"`
 }
 
 type Venue struct {
