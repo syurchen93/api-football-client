@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/syurchen93/api-football-client/common"
 	"github.com/syurchen93/api-football-client/request"
 	"github.com/syurchen93/api-football-client/response"
 	"github.com/syurchen93/api-football-client/response/leagues"
@@ -86,7 +87,7 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 
 	defer httpResponse.Body.Close()
 	responseBody, err := io.ReadAll(httpResponse.Body)
-	//os.WriteFile("test/response/rounds-2021-cl.json", responseBody, 0644)
+	//os.WriteFile("test/response/fixtures-cl-penalties.json", responseBody, 0644)
 	if err != nil {
 		return nil, err
 	}
@@ -234,6 +235,19 @@ func ToTimeHookFunc() mapstructure.DecodeHookFunc {
 				"date": *data.(*time.Time),
 			}, nil
 		}
+		if t == reflect.TypeOf(fixtures.Status{}) {
+			elapsed := data.(map[string]interface{})["elapsed"]
+			if nil != elapsed {
+				elapsed = int(elapsed.(float64))
+			} else {
+				elapsed = 0
+			}
+			return fixtures.Status{
+				Long: data.(map[string]interface{})["long"].(string),
+				Value: common.FixtureStatus(data.(map[string]interface{})["short"].(string)),
+				Elapsed: elapsed.(int),
+			}, nil
+		}
 
 		return data, nil
 	}
@@ -253,6 +267,18 @@ func stringifyMapContent(mapData map[string]interface{}) map[string]string {
 				stringValue = fmt.Sprintf("%d", value)
 			case time.Time:
 				stringValue = value.Format(timeFormatShort)
+			case []common.FixtureStatus:
+				statusStrings := make([]string, len(value))
+				for i, status := range value {
+					statusStrings[i] = fmt.Sprintf("%v", status)
+				}
+				stringValue = strings.Join(statusStrings, "-")
+			case []int:
+				statusStrings := make([]string, len(value))
+				for i, status := range value {
+					statusStrings[i] = fmt.Sprintf("%v", status)
+				}
+				stringValue = strings.Join(statusStrings, "-")
 			case map[string]interface{}:
 				dateValue, ok := value["date"]
 				if ok && !dateValue.(time.Time).IsZero() {

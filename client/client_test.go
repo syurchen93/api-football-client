@@ -19,6 +19,7 @@ import (
 	"github.com/syurchen93/api-football-client/request/standings"
 	"github.com/syurchen93/api-football-client/request/fixture"
 	"github.com/syurchen93/api-football-client/response"
+	"github.com/syurchen93/api-football-client/common"
 )
 
 var responseFolder string = "../test/response/"
@@ -135,6 +136,22 @@ func TestDoRequest(t *testing.T) {
 			RequestStruct: fixture.Round{League: 2, Season: 2021, Current: false},
 			SnapshotName: "rounds-2021-cl.json",
 			RequestUrlWithoutHost: "/fixtures/rounds?current=false&league=2&season=2021",
+		},
+		{
+			RequestStruct: fixture.Fixture{
+				League: 78, 
+				Statuses: []common.FixtureStatus{common.NotStarted, common.Postponed},
+				Season: 2023,
+			},
+			SnapshotName: "fixtures-bundes-ns-pst.json",
+			RequestUrlWithoutHost: "/fixtures?league=78&season=2023&status=NS-PST",
+		},
+		{
+			RequestStruct: fixture.Fixture{
+				IDs: []int{1149523, 1149519},
+			},
+			SnapshotName: "fixtures-cl-penalties.json",
+			RequestUrlWithoutHost: "/fixtures?ids=1149523-1149519",
 		},
 	}
 
