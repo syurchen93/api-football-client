@@ -12,6 +12,8 @@ type Fixture struct {
 	Teams   Teams          `json:"teams"`
 	Goals   Goals          `json:"goals"`
 	Score   Score          `json:"score"`
+	// This array of game events is returned even though it's not listed in the documentation
+	Events []Event         `json:"events"`
 }
 
 type FixtureDetails struct {

@@ -88,7 +88,7 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 
 	defer httpResponse.Body.Close()
 	responseBody, err := io.ReadAll(httpResponse.Body)
-	//os.WriteFile("test/response/fixture-stats-ball-possession.json", responseBody, 0644)
+	//os.WriteFile("test/response/fixture-events-goal.json", responseBody, 0644)
 	if err != nil {
 		return nil, err
 	}
@@ -269,6 +269,8 @@ func stringifyMapContent(mapData map[string]interface{}) map[string]string {
 			case string:
 				stringValue = value
 			case common.StatsType:
+				stringValue = string(value)
+			case common.EventType:
 				stringValue = string(value)
 			case int:
 				stringValue = fmt.Sprintf("%d", value)

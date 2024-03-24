@@ -171,6 +171,16 @@ func TestDoRequest(t *testing.T) {
 			SnapshotName: "fixture-stats-ball-possession.json",
 			RequestUrlWithoutHost: "/fixtures/statistics?fixture=653808&team=33&type=Ball+Possession",
 		},
+		{
+			RequestStruct: fixture.Event{FixtureID: 653808},
+			SnapshotName: "fixture-events.json",
+			RequestUrlWithoutHost: "/fixtures/events?fixture=653808",
+		},
+		{
+			RequestStruct: fixture.Event{FixtureID: 653808, Type: common.Goal},
+			SnapshotName: "fixture-events-goal.json",
+			RequestUrlWithoutHost: "/fixtures/events?fixture=653808&type=Goal",
+		},
 	}
 
 	for _, requestToTest := range requestsToTest {
