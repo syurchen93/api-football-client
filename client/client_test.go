@@ -153,6 +153,15 @@ func TestDoRequest(t *testing.T) {
 			SnapshotName: "fixtures-cl-penalties.json",
 			RequestUrlWithoutHost: "/fixtures?ids=1149523-1149519",
 		},
+		{
+			RequestStruct: fixture.HeadToHead{
+				H2H: []int{33, 50},
+				From: time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC),
+				To: time.Date(2023, 12, 31, 0, 0, 0, 0, time.UTC),
+			},
+			SnapshotName: "head-to-head-mu-mc-2021.json",
+			RequestUrlWithoutHost: "/fixtures/headtohead?from=2021-01-01&h2h=33-50&to=2023-12-31",
+		},
 	}
 
 	for _, requestToTest := range requestsToTest {
