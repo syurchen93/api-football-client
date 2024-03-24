@@ -162,6 +162,15 @@ func TestDoRequest(t *testing.T) {
 			SnapshotName: "head-to-head-mu-mc-2021.json",
 			RequestUrlWithoutHost: "/fixtures/headtohead?from=2021-01-01&h2h=33-50&to=2023-12-31",
 		},
+		{
+			RequestStruct: fixture.TeamStatistics{
+				FixtureID: 653808,
+				TeamID: 33,
+				Type: common.BallPossession,
+			},
+			SnapshotName: "fixture-stats-ball-possession.json",
+			RequestUrlWithoutHost: "/fixtures/statistics?fixture=653808&team=33&type=Ball+Possession",
+		},
 	}
 
 	for _, requestToTest := range requestsToTest {

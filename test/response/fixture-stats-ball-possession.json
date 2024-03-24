@@ -1,0 +1,1 @@
+{"get":"fixtures\/statistics","parameters":{"fixture":"653808","team":"33","type":"Ball Possession"},"errors":[],"results":1,"paging":{"current":1,"total":1},"response":[{"team":{"id":33,"name":"Manchester United","logo":"https:\/\/media.api-sports.io\/football\/teams\/33.png"},"statistics":[{"type":"Ball Possession","value":"39%"}]}]}

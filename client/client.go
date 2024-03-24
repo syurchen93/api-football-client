@@ -10,6 +10,7 @@ import (
 	//"os"
 	"reflect"
 	"strings"
+	"strconv"
 	"time"
 
 	"github.com/syurchen93/api-football-client/common"
@@ -87,7 +88,7 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 
 	defer httpResponse.Body.Close()
 	responseBody, err := io.ReadAll(httpResponse.Body)
-	//os.WriteFile("test/response/head-to-head-mu-mc-2021.json", responseBody, 0644)
+	//os.WriteFile("test/response/fixture-stats-ball-possession.json", responseBody, 0644)
 	if err != nil {
 		return nil, err
 	}
@@ -230,6 +231,10 @@ func ToTimeHookFunc() mapstructure.DecodeHookFunc {
 					return data, nil
 				}
 		}
+		if f.String() == "string" && t.String() == "int" && strings.Contains(data.(string), "%") {
+			return strconv.ParseInt(strings.TrimSuffix(data.(string), "%"), 10, 64)
+		}
+
 		if f.String() == "*time.Time" {
 			return map[string]time.Time {
 				"date": *data.(*time.Time),
@@ -263,6 +268,8 @@ func stringifyMapContent(mapData map[string]interface{}) map[string]string {
 				stringValue = boolToString(value)
 			case string:
 				stringValue = value
+			case common.StatsType:
+				stringValue = string(value)
 			case int:
 				stringValue = fmt.Sprintf("%d", value)
 			case time.Time:
