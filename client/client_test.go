@@ -60,6 +60,14 @@ func TestSetApiHost(t *testing.T) {
 func TestDoRequest(t *testing.T) {
 	var requestsToTest = []testRequestStruct {
 		{
+			RequestStruct: fixture.Lineup {
+				FixtureID: 653808,
+				Type: fixture.StartingXI,
+			},
+			SnapshotName: "fixture-lineup-startXI.json",
+			RequestUrlWithoutHost: "/fixtures/lineups?fixture=653808&type=startxi",
+		},
+		{
 			RequestStruct: league.Country{},
 			SnapshotName: "countries-full.json",
 			RequestUrlWithoutHost: "/countries",

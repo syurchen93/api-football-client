@@ -9,16 +9,19 @@ import (
 
 	//"os"
 	"reflect"
-	"strings"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/syurchen93/api-football-client/common"
 	"github.com/syurchen93/api-football-client/request"
+	"github.com/syurchen93/api-football-client/request/fixture"
 	"github.com/syurchen93/api-football-client/response"
+	"github.com/syurchen93/api-football-client/response/fixtures"
 	"github.com/syurchen93/api-football-client/response/leagues"
 	"github.com/syurchen93/api-football-client/response/misc"
-	"github.com/syurchen93/api-football-client/response/fixtures"
+
+	"github.com/syurchen93/api-football-client/parser"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/mitchellh/mapstructure"
@@ -88,7 +91,7 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 
 	defer httpResponse.Body.Close()
 	responseBody, err := io.ReadAll(httpResponse.Body)
-	//os.WriteFile("test/response/fixture-events-goal.json", responseBody, 0644)
+	//os.WriteFile("test/response/fixture-lineup-startXI.json", responseBody, 0644)
 	if err != nil {
 		return nil, err
 	}
@@ -205,6 +208,13 @@ func ToTimeHookFunc() mapstructure.DecodeHookFunc {
 		t reflect.Type,
 		data interface{}) (interface{}, error) {
 
+		if t == reflect.TypeOf(fixtures.Lineup{}) {
+			dataMap := data.(map[string]interface{})
+			formation := dataMap["formation"]
+			dataMap["formation"] = parser.ParseFormationStringIntoMap(formation.(string))
+			dataMap["startXI"] = preparePlayerMap(dataMap["startXI"])
+		}
+
 		if t == reflect.TypeOf(leagues.SeasonYear{}) {
 			return leagues.SeasonYear{Year: int(data.(float64))}, nil
 		}
@@ -272,6 +282,8 @@ func stringifyMapContent(mapData map[string]interface{}) map[string]string {
 				stringValue = string(value)
 			case common.EventType:
 				stringValue = string(value)
+			case fixture.LineupType:
+				stringValue = string(value)
 			case int:
 				stringValue = fmt.Sprintf("%d", value)
 			case time.Time:
@@ -306,4 +318,38 @@ func boolToString(b bool) string {
 		return "true"
 	}
 	return "false"
+}
+
+func preparePlayerMap(players interface{}) interface{} {
+	playerSlice := make([]interface{}, 0)
+
+	for _, player := range players.([]interface{}) {
+		playerMap := player.(map[string]interface{})
+		fixedPlayerMap := playerMap["player"].(map[string]interface{})
+		grid := fixedPlayerMap["grid"]
+		if grid != nil {
+			fixedPlayerMap["grid"] = prepareGrid(fixedPlayerMap["grid"].(string))
+		}
+
+		playerSlice = append(playerSlice, fixedPlayerMap)
+	}
+
+	return playerSlice
+}
+
+func prepareGrid(gridString string) map[string]interface{} {
+	gridMap := make(map[string]interface{})
+
+	if gridString == "" {
+		return gridMap
+	}
+
+	gridSlice := strings.Split(gridString, ":")
+	if (len(gridSlice) != 2) {
+		return gridMap
+	}
+	gridMap["row"] = gridSlice[0]
+	gridMap["column"] = gridSlice[1]
+
+	return gridMap
 }
