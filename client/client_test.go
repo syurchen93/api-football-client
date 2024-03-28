@@ -60,14 +60,6 @@ func TestSetApiHost(t *testing.T) {
 func TestDoRequest(t *testing.T) {
 	var requestsToTest = []testRequestStruct {
 		{
-			RequestStruct: fixture.Lineup {
-				FixtureID: 653808,
-				Type: fixture.StartingXI,
-			},
-			SnapshotName: "fixture-lineup-startXI.json",
-			RequestUrlWithoutHost: "/fixtures/lineups?fixture=653808&type=startxi",
-		},
-		{
 			RequestStruct: league.Country{},
 			SnapshotName: "countries-full.json",
 			RequestUrlWithoutHost: "/countries",
@@ -188,6 +180,14 @@ func TestDoRequest(t *testing.T) {
 			RequestStruct: fixture.Event{FixtureID: 653808, Type: common.Goal},
 			SnapshotName: "fixture-events-goal.json",
 			RequestUrlWithoutHost: "/fixtures/events?fixture=653808&type=Goal",
+		},
+		{
+			RequestStruct: fixture.Lineup {
+				FixtureID: 653808,
+				Type: fixture.StartingXI,
+			},
+			SnapshotName: "fixture-lineup-startXI.json",
+			RequestUrlWithoutHost: "/fixtures/lineups?fixture=653808&type=startxi",
 		},
 	}
 
