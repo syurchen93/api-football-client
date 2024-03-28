@@ -91,7 +91,7 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 
 	defer httpResponse.Body.Close()
 	responseBody, err := io.ReadAll(httpResponse.Body)
-	//os.WriteFile("test/response/fixture-lineup-startXI.json", responseBody, 0644)
+	//os.WriteFile("test/response/fixture-lineup-full.json", responseBody, 0644)
 	if err != nil {
 		return nil, err
 	}
@@ -212,7 +212,12 @@ func ToTimeHookFunc() mapstructure.DecodeHookFunc {
 			dataMap := data.(map[string]interface{})
 			formation := dataMap["formation"]
 			dataMap["formation"] = parser.ParseFormationStringIntoMap(formation.(string))
-			dataMap["startXI"] = preparePlayerMap(dataMap["startXI"])
+			if dataMap["startXI"] != nil {
+				dataMap["startXI"] = preparePlayerMap(dataMap["startXI"])
+			}
+			if dataMap["substitutes"] != nil {
+				dataMap["substitutes"] = preparePlayerMap(dataMap["substitutes"])
+			}
 		}
 
 		if t == reflect.TypeOf(leagues.SeasonYear{}) {

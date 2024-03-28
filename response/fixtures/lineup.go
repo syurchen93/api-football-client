@@ -50,6 +50,7 @@ type Formation struct {
 	Midfielders          int `mapstructure:"M" json:"M"`
 	AttackingMidfielders int `mapstructure:"AM" json:"AM"`
 	Forwards             int `mapstructure:"F" json:"F"`
+	Original			 string `mapstructre:"original" json:"original"`
 }
 
 type LineupPosition string

@@ -6,8 +6,8 @@ import (
 	"github.com/syurchen93/api-football-client/response/fixtures"
 )
 
-func ParseFormationStringIntoMap(formation string) map[string]int {
-	formationMap := make(map[string]int)
+func ParseFormationStringIntoMap(formation string) map[string]interface{} {
+	formationMap := make(map[string]interface{})
 	formationParts := strings.Split(formation, "-")
 	formationInts := make([]int, len(formationParts))
 	for i, part := range formationParts {
@@ -42,6 +42,7 @@ func ParseFormationStringIntoMap(formation string) map[string]int {
 	if midfielderCount > 0 {
 		formationMap[string(fixtures.LineupPositionMidfielder)] = midfielderCount
 	}
+	formationMap["original"] = formation
 
 
 	return formationMap
