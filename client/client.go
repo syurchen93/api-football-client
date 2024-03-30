@@ -33,9 +33,9 @@ var validate *validator.Validate
 var timeFormatShort = "2006-01-02"
 
 type Client struct {
-	apiKey string
-	baseURL string
-	apiHost string
+	apiKey     string
+	baseURL    string
+	apiHost    string
 	httpClient *http.Client
 }
 
@@ -43,9 +43,9 @@ func NewClient(apiKey string) *Client {
 	validate = validator.New(validator.WithRequiredStructEnabled())
 
 	return &Client{
-		apiKey: apiKey,
-		baseURL: baseURL,
-		apiHost: apiHost,
+		apiKey:     apiKey,
+		baseURL:    baseURL,
+		apiHost:    apiHost,
 		httpClient: &http.Client{},
 	}
 }
@@ -71,8 +71,8 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 	}
 
 	httpRequest, err := http.NewRequest(
-		"GET", 
-		requestUrlWithParams, 
+		"GET",
+		requestUrlWithParams,
 		nil,
 	)
 	if err != nil {
@@ -127,7 +127,7 @@ func (c Client) prepareUrlWithParams(requestStruct request.RequestInterface) (st
 }
 
 func mapResponseToCorrectStruct(
-	responseBody []byte, 
+	responseBody []byte,
 	requestStruct request.RequestInterface,
 ) ([]response.ResponseInterface, error) {
 	responseStruct := response.Response{}
@@ -139,19 +139,19 @@ func mapResponseToCorrectStruct(
 	}
 
 	switch responseStruct.Errors.(type) {
-		case []interface{}:
-		case map[string]interface{}:
-			if len(responseStruct.Errors.(map[string]interface{})) > 0 {
-				return nil, fmt.Errorf("API returned errors: %v", responseStruct.Errors)
-			}
+	case []interface{}:
+	case map[string]interface{}:
+		if len(responseStruct.Errors.(map[string]interface{})) > 0 {
+			return nil, fmt.Errorf("API returned errors: %v", responseStruct.Errors)
+		}
 	}
 
 	var responseMap []interface{}
 	switch responseStruct.ResponseMap.(type) {
-		case []interface{}:
-			responseMap = responseStruct.ResponseMap.([]interface{})
-		case interface{}:
-			responseMap = append(responseMap, responseStruct.ResponseMap)
+	case []interface{}:
+		responseMap = responseStruct.ResponseMap.([]interface{})
+	case interface{}:
+		responseMap = append(responseMap, responseStruct.ResponseMap)
 	}
 
 	endResponses := make([]response.ResponseInterface, 0)
@@ -182,14 +182,13 @@ func mapResponseToCorrectStruct(
 	return endResponses, nil
 }
 
-
 func Decode(input interface{}, result interface{}) error {
 	decoder, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
 		Metadata: nil,
 		DecodeHook: mapstructure.ComposeDecodeHookFunc(
 			ToTimeHookFunc(),
 		),
-		Result: result,
+		Result:           result,
 		WeaklyTypedInput: true,
 	})
 	if err != nil {
@@ -219,6 +218,12 @@ func ToTimeHookFunc() mapstructure.DecodeHookFunc {
 				dataMap["substitutes"] = preparePlayerMap(dataMap["substitutes"])
 			}
 		}
+		if t == reflect.TypeOf(fixtures.TeamPlayerStats{}) {
+			dataMap := data.(map[string]interface{})
+			if dataMap["statistics"] != nil {
+				dataMap["statistics"] = dataMap["statistics"].([]interface{})[0]
+			}
+		}
 
 		if t == reflect.TypeOf(leagues.SeasonYear{}) {
 			return leagues.SeasonYear{Year: int(data.(float64))}, nil
@@ -232,26 +237,26 @@ func ToTimeHookFunc() mapstructure.DecodeHookFunc {
 
 		if t == reflect.TypeOf(time.Time{}) {
 			switch f.Kind() {
-				case reflect.String:
-					if (strings.Contains(data.(string), "T")) {
-						return time.Parse(time.RFC3339, data.(string))
-					} else {
-						return time.Parse(timeFormatShort, data.(string))
-					}
-				case reflect.Float64:
-					return time.Unix(0, int64(data.(float64))*int64(time.Millisecond)), nil
-				case reflect.Int64:
-					return time.Unix(0, data.(int64)*int64(time.Millisecond)), nil
-				default:
-					return data, nil
+			case reflect.String:
+				if strings.Contains(data.(string), "T") {
+					return time.Parse(time.RFC3339, data.(string))
+				} else {
+					return time.Parse(timeFormatShort, data.(string))
 				}
+			case reflect.Float64:
+				return time.Unix(0, int64(data.(float64))*int64(time.Millisecond)), nil
+			case reflect.Int64:
+				return time.Unix(0, data.(int64)*int64(time.Millisecond)), nil
+			default:
+				return data, nil
+			}
 		}
 		if f.String() == "string" && t.String() == "int" && strings.Contains(data.(string), "%") {
 			return strconv.ParseInt(strings.TrimSuffix(data.(string), "%"), 10, 64)
 		}
 
 		if f.String() == "*time.Time" {
-			return map[string]time.Time {
+			return map[string]time.Time{
 				"date": *data.(*time.Time),
 			}, nil
 		}
@@ -263,8 +268,8 @@ func ToTimeHookFunc() mapstructure.DecodeHookFunc {
 				elapsed = 0
 			}
 			return fixtures.Status{
-				Long: data.(map[string]interface{})["long"].(string),
-				Value: common.FixtureStatus(data.(map[string]interface{})["short"].(string)),
+				Long:    data.(map[string]interface{})["long"].(string),
+				Value:   common.FixtureStatus(data.(map[string]interface{})["short"].(string)),
 				Elapsed: elapsed.(int),
 			}, nil
 		}
@@ -279,37 +284,37 @@ func stringifyMapContent(mapData map[string]interface{}) map[string]string {
 	for key, value := range mapData {
 		var stringValue string
 		switch value := value.(type) {
-			case bool:
-				stringValue = boolToString(value)
-			case string:
-				stringValue = value
-			case common.StatsType:
-				stringValue = string(value)
-			case common.EventType:
-				stringValue = string(value)
-			case fixture.LineupType:
-				stringValue = string(value)
-			case int:
-				stringValue = fmt.Sprintf("%d", value)
-			case time.Time:
-				stringValue = value.Format(timeFormatShort)
-			case []common.FixtureStatus:
-				statusStrings := make([]string, len(value))
-				for i, status := range value {
-					statusStrings[i] = fmt.Sprintf("%v", status)
-				}
-				stringValue = strings.Join(statusStrings, "-")
-			case []int:
-				statusStrings := make([]string, len(value))
-				for i, status := range value {
-					statusStrings[i] = fmt.Sprintf("%v", status)
-				}
-				stringValue = strings.Join(statusStrings, "-")
-			case map[string]interface{}:
-				dateValue, ok := value["date"]
-				if ok && !dateValue.(time.Time).IsZero() {
-					stringValue = dateValue.(time.Time).Format(timeFormatShort)
-				}
+		case bool:
+			stringValue = boolToString(value)
+		case string:
+			stringValue = value
+		case common.StatsType:
+			stringValue = string(value)
+		case common.EventType:
+			stringValue = string(value)
+		case fixture.LineupType:
+			stringValue = string(value)
+		case int:
+			stringValue = fmt.Sprintf("%d", value)
+		case time.Time:
+			stringValue = value.Format(timeFormatShort)
+		case []common.FixtureStatus:
+			statusStrings := make([]string, len(value))
+			for i, status := range value {
+				statusStrings[i] = fmt.Sprintf("%v", status)
+			}
+			stringValue = strings.Join(statusStrings, "-")
+		case []int:
+			statusStrings := make([]string, len(value))
+			for i, status := range value {
+				statusStrings[i] = fmt.Sprintf("%v", status)
+			}
+			stringValue = strings.Join(statusStrings, "-")
+		case map[string]interface{}:
+			dateValue, ok := value["date"]
+			if ok && !dateValue.(time.Time).IsZero() {
+				stringValue = dateValue.(time.Time).Format(timeFormatShort)
+			}
 		}
 
 		stringifiedMap[key] = stringValue
@@ -350,7 +355,7 @@ func prepareGrid(gridString string) map[string]interface{} {
 	}
 
 	gridSlice := strings.Split(gridString, ":")
-	if (len(gridSlice) != 2) {
+	if len(gridSlice) != 2 {
 		return gridMap
 	}
 	gridMap["row"] = gridSlice[0]

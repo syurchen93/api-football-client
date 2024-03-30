@@ -196,6 +196,11 @@ func TestDoRequest(t *testing.T) {
 			SnapshotName: "fixture-lineup-full.json",
 			RequestUrlWithoutHost: "/fixtures/lineups?fixture=653808",
 		},
+		{
+			RequestStruct: fixture.PlayerStatistics{FixtureID: 592872},
+			SnapshotName: "fixture-player-stats.json",
+			RequestUrlWithoutHost: "/fixtures/players?fixture=592872",
+		},
 	}
 
 	for _, requestToTest := range requestsToTest {

@@ -22,6 +22,7 @@ type Time struct {
 type Player struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
+	Photo string `mapstructure:"omitempty" json:"photo,omitempty"`
 }
 
 func (e Event) IsPenaltyShootout() bool {
