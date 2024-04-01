@@ -2,7 +2,6 @@ package misc
 
 import (
 	"time"
-
 )
 
 type Coach struct {
@@ -20,7 +19,7 @@ type Coach struct {
 }
 
 type Birth struct {
-	Date    string `json:"date"`
+	Date    time.Time `json:"date"`
 	Place   string `json:"place"`
 	Country string `json:"country"`
 }
@@ -34,6 +33,6 @@ type TeamBasic struct {
 
 type Career struct {
     Team  TeamBasic `json:"team"`
-	Start string `json:"start"`
-	End   *string `json:"end,omitempty"`
+	Start time.Time `json:"start"`
+	End   *time.Time `json:"end,omitempty"`
 }
