@@ -3,7 +3,7 @@ Module Api Football Client
 
 A go lang SDK for [API Football](https://www.api-football.com/documentation-v3)
 
-[![Go Coverage](https://github.com/syurchen93/api-football-client/wiki/coverage.svg)](https://raw.githack.com/wiki/syurchen93/api-football-client/coverage.html)
+[![Go Coverage](https://github.com/syurchen93/api-football-client/wiki/coverage.svg)](https://raw.githack.com/wiki/syurchen93/api-football-client/coverage.html) [![Go Report Card](https://goreportcard.com/badge/github.com/syurchen93/api-football-client)](https://goreportcard.com/report/github.com/syurchen93/api-football-client)
 
 Usage example:
 ```go
