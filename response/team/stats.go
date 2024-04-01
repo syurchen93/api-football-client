@@ -5,17 +5,17 @@ import (
 )
 
 type Statistics struct {
-	League  leagues.League  `json:"league"`
-	Team    Team    `json:"team"`
-	FormString string  `json:"form" mapstructure:"form"`
-	Fixtures Fixtures `json:"fixtures"`
-	Goals   Goals   `json:"goals"`
-	Biggest Biggest `json:"biggest"`
-	CleanSheet CleanSheet `json:"clean_sheet"`
-	FailedToScore FailedToScore `json:"failed_to_score"`
-	Penalty Penalty `json:"penalty"`
-	Lineups []Lineup `json:"lineups"`
-	Cards   Cards   `json:"cards"`
+	League        leagues.League `json:"league"`
+	Team          Team           `json:"team"`
+	FormString    string         `json:"form" mapstructure:"form"`
+	Fixtures      Fixtures       `json:"fixtures"`
+	Goals         Goals          `json:"goals"`
+	Biggest       Biggest        `json:"biggest"`
+	CleanSheet    CleanSheet     `json:"clean_sheet"`
+	FailedToScore FailedToScore  `json:"failed_to_score"`
+	Penalty       Penalty        `json:"penalty"`
+	Lineups       []Lineup       `json:"lineups"`
+	Cards         Cards          `json:"cards"`
 }
 
 type Fixtures struct {
@@ -37,9 +37,9 @@ type Goals struct {
 }
 
 type GoalDetails struct {
-	Total   GoalTotalDetails `json:"total"`
-	Average GoalAverage      `json:"average"`
-	Minute  MinuteDistribution       `json:"minute"`
+	Total   GoalTotalDetails   `json:"total"`
+	Average GoalAverage        `json:"average"`
+	Minute  MinuteDistribution `json:"minute"`
 }
 
 type GoalTotalDetails struct {
@@ -55,26 +55,26 @@ type GoalAverage struct {
 }
 
 type MinuteDistribution struct {
-	ZeroToFifteen  MinuteDetails `json:"0-15" mapstructure:"0-15"`
-	SixteenToThirty MinuteDetails `json:"16-30" mapstructure:"16-30"`
-	ThirtyOneToFortyFive MinuteDetails `json:"31-45" mapstructure:"31-45"`
-	FortySixToSixty MinuteDetails `json:"46-60" mapstructure:"46-60"`
-	SixtyOneToSeventyFive MinuteDetails `json:"61-75" mapstructure:"61-75"`
-	SeventySixToNinety MinuteDetails `json:"76-90" mapstructure:"76-90"`
-	NinetyOneToOneHundredFive MinuteDetails `json:"91-105" mapstructure:"91-105"`
+	ZeroToFifteen                   MinuteDetails `json:"0-15" mapstructure:"0-15"`
+	SixteenToThirty                 MinuteDetails `json:"16-30" mapstructure:"16-30"`
+	ThirtyOneToFortyFive            MinuteDetails `json:"31-45" mapstructure:"31-45"`
+	FortySixToSixty                 MinuteDetails `json:"46-60" mapstructure:"46-60"`
+	SixtyOneToSeventyFive           MinuteDetails `json:"61-75" mapstructure:"61-75"`
+	SeventySixToNinety              MinuteDetails `json:"76-90" mapstructure:"76-90"`
+	NinetyOneToOneHundredFive       MinuteDetails `json:"91-105" mapstructure:"91-105"`
 	OneHundredSixToOneHundredTwenty MinuteDetails `json:"106-120" mapstructure:"106-120"`
 }
 
 type MinuteDetails struct {
-	Total      *int    `json:"total"`
+	Total      *int     `json:"total"`
 	Percentage *float32 `json:"percentage"`
 }
 
 type Biggest struct {
-	Streak  StreakDetails `json:"streak"`
-	Wins    ScoreDetails  `json:"wins"`
-	Loses   ScoreDetails  `json:"loses"`
-	Goals   GoalScore     `json:"goals"`
+	Streak StreakDetails `json:"streak"`
+	Wins   ScoreDetails  `json:"wins"`
+	Loses  ScoreDetails  `json:"loses"`
+	Goals  GoalScore     `json:"goals"`
 }
 
 type StreakDetails struct {

@@ -5,23 +5,23 @@ import (
 )
 
 type Coach struct {
-	ID          int    `json:"id"`
-	Name        string `json:"name"`
-	FirstName   string `json:"firstname"`
-	LastName    string `json:"lastname"`
-	Age         int    `json:"age"`
-	Birth       Birth  `json:"birth"`
-	Nationality string `json:"nationality"`
-	Height      string `json:"height"`
-	Weight      string `json:"weight"`
+	ID          int       `json:"id"`
+	Name        string    `json:"name"`
+	FirstName   string    `json:"firstname"`
+	LastName    string    `json:"lastname"`
+	Age         int       `json:"age"`
+	Birth       Birth     `json:"birth"`
+	Nationality string    `json:"nationality"`
+	Height      string    `json:"height"`
+	Weight      string    `json:"weight"`
 	Team        TeamBasic `json:"team"`
-	Career      []Career `json:"career"`
+	Career      []Career  `json:"career"`
 }
 
 type Birth struct {
 	Date    time.Time `json:"date"`
-	Place   string `json:"place"`
-	Country string `json:"country"`
+	Place   string    `json:"place"`
+	Country string    `json:"country"`
 }
 
 type TeamBasic struct {
@@ -32,7 +32,7 @@ type TeamBasic struct {
 }
 
 type Career struct {
-    Team  TeamBasic `json:"team"`
-	Start time.Time `json:"start"`
+	Team  TeamBasic  `json:"team"`
+	Start time.Time  `json:"start"`
 	End   *time.Time `json:"end,omitempty"`
 }

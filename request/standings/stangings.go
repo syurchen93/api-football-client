@@ -6,9 +6,9 @@ import (
 )
 
 type Standings struct {
-	League int    `mapstructure:"league,omitempty"`
-	Season int    `mapstructure:"season" validate:"required,gte=1000,lte=9999"`
-	Team   int    `mapstructure:"team,omitempty"`
+	League int `mapstructure:"league,omitempty"`
+	Season int `mapstructure:"season" validate:"required,gte=1000,lte=9999"`
+	Team   int `mapstructure:"team,omitempty"`
 }
 
 func (s Standings) GetEndpoint() string {

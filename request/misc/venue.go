@@ -6,11 +6,11 @@ import (
 )
 
 type Venue struct {
-    ID      int    `mapstructure:"id,omitempty"`
-    Name    string `mapstructure:"name,omitempty"`
-    City    string `mapstructure:"city,omitempty"`
-    Country string `mapstructure:"country,omitempty"`
-    Search  string `mapstructure:"search,omitempty" validate:"min=3,omitempty"`
+	ID      int    `mapstructure:"id,omitempty"`
+	Name    string `mapstructure:"name,omitempty"`
+	City    string `mapstructure:"city,omitempty"`
+	Country string `mapstructure:"country,omitempty"`
+	Search  string `mapstructure:"search,omitempty" validate:"min=3,omitempty"`
 }
 
 func (v Venue) GetEndpoint() string {

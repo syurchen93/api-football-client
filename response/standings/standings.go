@@ -10,27 +10,27 @@ type Standings struct {
 }
 
 type League struct {
-	ID       int       `json:"id"`
-	Name     string    `json:"name"`
-	Country  string    `json:"country"`
-	Logo     string    `json:"logo"`
-	Flag     string    `json:"flag"`
-	Season   int       `json:"season"`
+	ID        int         `json:"id"`
+	Name      string      `json:"name"`
+	Country   string      `json:"country"`
+	Logo      string      `json:"logo"`
+	Flag      string      `json:"flag"`
+	Season    int         `json:"season"`
 	Standings [][]Ranking `json:"standings"`
 }
 
 type Ranking struct {
-	Rank        int    `json:"rank"`
-	Team        team.Team   `json:"team"`
-	Points      int    `json:"points"`
-	GoalsDiff   int    `json:"goalsDiff"`
-	Group       string `json:"group"`
-	Form        string `json:"form"`
-	Status      string `json:"status"`
-	Description string `json:"description"`
-	All         Match  `json:"all"`
-	Home        Match  `json:"home"`
-	Away        Match  `json:"away"`
+	Rank        int       `json:"rank"`
+	Team        team.Team `json:"team"`
+	Points      int       `json:"points"`
+	GoalsDiff   int       `json:"goalsDiff"`
+	Group       string    `json:"group"`
+	Form        string    `json:"form"`
+	Status      string    `json:"status"`
+	Description string    `json:"description"`
+	All         Match     `json:"all"`
+	Home        Match     `json:"home"`
+	Away        Match     `json:"away"`
 	Updated     time.Time `json:"update" mapstructure:"update"`
 }
 

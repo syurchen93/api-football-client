@@ -1,8 +1,8 @@
 package team
 
 import (
-	"github.com/syurchen93/api-football-client/response/leagues"
 	"github.com/syurchen93/api-football-client/response"
+	"github.com/syurchen93/api-football-client/response/leagues"
 )
 
 type Season struct {

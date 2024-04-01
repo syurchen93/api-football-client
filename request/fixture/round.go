@@ -6,8 +6,8 @@ import (
 )
 
 type Round struct {
-	League int `mapstructure:"league" validate:"required"`
-	Season int `mapstructure:"season" validate:"required,gte=1000,lte=9999"`
+	League  int  `mapstructure:"league" validate:"required"`
+	Season  int  `mapstructure:"season" validate:"required,gte=1000,lte=9999"`
 	Current bool `mapstructure:"current"`
 }
 

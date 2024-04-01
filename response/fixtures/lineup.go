@@ -45,12 +45,12 @@ type GridCell struct {
 }
 
 type Formation struct {
-	Defenders            int `mapstructure:"D" json:"D"`
-	DefenciveMidfielders int `mapstructure:"DM" json:"DM"`
-	Midfielders          int `mapstructure:"M" json:"M"`
-	AttackingMidfielders int `mapstructure:"AM" json:"AM"`
-	Forwards             int `mapstructure:"F" json:"F"`
-	Original			 string `mapstructre:"original" json:"original"`
+	Defenders            int    `mapstructure:"D" json:"D"`
+	DefenciveMidfielders int    `mapstructure:"DM" json:"DM"`
+	Midfielders          int    `mapstructure:"M" json:"M"`
+	AttackingMidfielders int    `mapstructure:"AM" json:"AM"`
+	Forwards             int    `mapstructure:"F" json:"F"`
+	Original             string `mapstructre:"original" json:"original"`
 }
 
 type LineupPosition string

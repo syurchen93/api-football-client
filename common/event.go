@@ -3,10 +3,10 @@ package common
 type EventType string
 
 const (
-	Goal        EventType = "Goal"
-	Card        EventType = "Card"
+	Goal         EventType = "Goal"
+	Card         EventType = "Card"
 	Substitution EventType = "subst"
-	Var         EventType = "Var"
+	Var          EventType = "Var"
 )
 
 type EventTypeDetails string
@@ -27,7 +27,7 @@ const (
 	Substitution5 EventTypeDetails = "Substitution 5"
 	Substitution6 EventTypeDetails = "Substitution 6"
 
-	VarGoalCancelled      EventTypeDetails = "Goal cancelled"
+	VarGoalCancelled    EventTypeDetails = "Goal cancelled"
 	VarPenaltyConfirmed EventTypeDetails = "Penalty confirmed"
 )
 

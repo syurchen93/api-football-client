@@ -16,8 +16,6 @@ type PlayerStatistics struct {
 	Players []TeamPlayerStats `mapstructure:"players" json:"players"`
 }
 
-
-
 type TeamStatistic struct {
 	Type  common.StatsType `json:"type"`
 	Value int              `json:"value"`
@@ -104,9 +102,9 @@ type CardsStats struct {
 }
 
 type PenaltyStats struct {
-	Won      int `json:"won"`
+	Won       int `json:"won"`
 	Committed int `mapstructure:"commited" json:"committed"`
-	Scored   int `json:"scored"`
-	Missed   int `json:"missed"`
-	Saved    int `json:"saved"`
+	Scored    int `json:"scored"`
+	Missed    int `json:"missed"`
+	Saved     int `json:"saved"`
 }

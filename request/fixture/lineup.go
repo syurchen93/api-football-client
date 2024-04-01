@@ -15,10 +15,10 @@ type Lineup struct {
 type LineupType string
 
 const (
-	StartingXI LineupType = "startxi"
+	StartingXI  LineupType = "startxi"
 	Substitutes LineupType = "substitutes"
-	Formation LineupType = "formation"
-	Coach LineupType = "coach"
+	Formation   LineupType = "formation"
+	Coach       LineupType = "coach"
 )
 
 func (l Lineup) GetEndpoint() string {

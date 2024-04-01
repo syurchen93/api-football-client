@@ -1,9 +1,9 @@
 package fixtures
 
 import (
-	"time"
 	"github.com/syurchen93/api-football-client/common"
 	"github.com/syurchen93/api-football-client/response/misc"
+	"time"
 )
 
 type Fixture struct {
@@ -13,18 +13,18 @@ type Fixture struct {
 	Goals   Goals          `json:"goals"`
 	Score   Score          `json:"score"`
 	// This array of game events is returned even though it's not listed in the documentation
-	Events []Event         `json:"events"`
+	Events []Event `json:"events"`
 }
 
 type FixtureDetails struct {
-	ID        int       `json:"id"`
-	Referee   string    `json:"referee"`
-	Timezone  string    `json:"timezone"`
-	Date      time.Time `json:"date"`
-	Timestamp int       `json:"timestamp"`
-	Periods   Periods   `json:"periods"`
+	ID        int        `json:"id"`
+	Referee   string     `json:"referee"`
+	Timezone  string     `json:"timezone"`
+	Date      time.Time  `json:"date"`
+	Timestamp int        `json:"timestamp"`
+	Periods   Periods    `json:"periods"`
 	Venue     misc.Venue `json:"venue"`
-	Status    Status    `json:"status"`
+	Status    Status     `json:"status"`
 }
 
 type Periods struct {
@@ -39,18 +39,18 @@ type Venue struct {
 }
 
 type Status struct {
-	Long    string `json:"long"`
-	Value common.FixtureStatus `json:"short"`
-	Elapsed int    `json:"elapsed"`
+	Long    string               `json:"long"`
+	Value   common.FixtureStatus `json:"short"`
+	Elapsed int                  `json:"elapsed"`
 }
 
 type League struct {
-	ID      int    `json:"id"`
-	Name    string `json:"name"`
-	Country string `json:"country"`
-	Logo    string `json:"logo"`
-	Flag    string `json:"flag"`
-	Season  int    `json:"season"`
+	ID      int     `json:"id"`
+	Name    string  `json:"name"`
+	Country string  `json:"country"`
+	Logo    string  `json:"logo"`
+	Flag    string  `json:"flag"`
+	Season  int     `json:"season"`
 	Round   *string `json:"round"`
 }
 
@@ -63,7 +63,7 @@ type Team struct {
 	ID     int    `json:"id"`
 	Name   string `json:"name"`
 	Logo   string `json:"logo"`
-	Winner *bool   `json:"winner"`
+	Winner *bool  `json:"winner"`
 }
 
 type Goals struct {

@@ -7,10 +7,10 @@ import (
 )
 
 type Event struct {
-	FixtureID int        `mapstructure:"fixture" validate:"required"`
-	TeamID    int        `mapstructure:"team,omitempty"`
-	PlayerID  int        `mapstructure:"player,omitempty"`
-	Type      common.EventType  `mapstructure:"type,omitempty"`
+	FixtureID int              `mapstructure:"fixture" validate:"required"`
+	TeamID    int              `mapstructure:"team,omitempty"`
+	PlayerID  int              `mapstructure:"player,omitempty"`
+	Type      common.EventType `mapstructure:"type,omitempty"`
 }
 
 func (e Event) GetEndpoint() string {

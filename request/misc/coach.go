@@ -6,9 +6,9 @@ import (
 )
 
 type Coach struct {
-	ID      int    `mapstructure:"id,omitempty"`
-	TeamID  int    `mapstructure:"team,omitempty"`
-	Search  string `mapstructure:"search,omitempty" validate:"omitempty,min=3"`
+	ID     int    `mapstructure:"id,omitempty"`
+	TeamID int    `mapstructure:"team,omitempty"`
+	Search string `mapstructure:"search,omitempty" validate:"omitempty,min=3"`
 }
 
 func (c Coach) GetEndpoint() string {
@@ -18,4 +18,3 @@ func (c Coach) GetEndpoint() string {
 func (c Coach) GetResponseStruct() response.ResponseInterface {
 	return misc.Coach{}
 }
-

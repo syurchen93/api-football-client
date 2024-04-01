@@ -1,7 +1,7 @@
 package team
 
 type Information struct {
-	Team Team `json:"team"`
+	Team  Team  `json:"team"`
 	Venue Venue `json:"venue"`
 }
 

@@ -9,10 +9,10 @@ import (
 
 	//"os"
 	"reflect"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
-	"regexp"
 
 	"github.com/syurchen93/api-football-client/common"
 	"github.com/syurchen93/api-football-client/request"
