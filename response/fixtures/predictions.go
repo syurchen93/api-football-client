@@ -27,9 +27,9 @@ type AverageGoals struct {
 }
 
 type Percent struct {
-	Home string `mapstructure:"home"`
-	Draw string `mapstructure:"draw"`
-	Away string `mapstructure:"away"`
+	Home int `mapstructure:"home"`
+	Draw int `mapstructure:"draw"`
+	Away int `mapstructure:"away"`
 }
 
 type TeamStats struct {
@@ -46,9 +46,9 @@ type TeamDetails struct {
 }
 
 type Last5 struct {
-	Form string `mapstructure:"form"`
-	Att  string `mapstructure:"att"`
-	Def  string `mapstructure:"def"`
+	FormPercentage int `mapstructure:"form"`
+	AttPercentage int `mapstructure:"att"`
+	DefPercentage int `mapstructure:"def"`
 	Goals GoalAmountData `mapstructure:"goals"`
 }
 
@@ -82,7 +82,7 @@ type TeamPenaltyStats struct {
 
 type AverageCount struct {
 	Total int `mapstructure:"total"`
-	Average string `mapstructure:"percentage"`
+	Average float32 `mapstructure:"percentage"`
 }
 
 type LineupUsage struct {

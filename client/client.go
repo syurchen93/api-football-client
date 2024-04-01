@@ -12,6 +12,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"regexp"
 
 	"github.com/syurchen93/api-football-client/common"
 	"github.com/syurchen93/api-football-client/request"
@@ -206,6 +207,22 @@ func ToTimeHookFunc() mapstructure.DecodeHookFunc {
 		f reflect.Type,
 		t reflect.Type,
 		data interface{}) (interface{}, error) {
+
+		if f.Kind() == reflect.String && t.Kind() == reflect.Float32 {
+			re := regexp.MustCompile("[^0-9.]+")
+			cleanedString := re.ReplaceAllString(data.(string), "")
+			return strconv.ParseFloat(cleanedString, 32)
+		}
+
+		if f.Kind() == reflect.String && t.Kind() == reflect.Int {
+			re := regexp.MustCompile("[^0-9]+")
+			cleanedString := re.ReplaceAllString(data.(string), "")
+			parsedInt, err := strconv.Atoi(cleanedString)
+			if err != nil {
+				return 0, err
+			}
+			return parsedInt, nil
+		}
 
 		if t == reflect.TypeOf(fixtures.Lineup{}) {
 			dataMap := data.(map[string]interface{})

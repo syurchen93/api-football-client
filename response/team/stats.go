@@ -67,7 +67,7 @@ type MinuteDistribution struct {
 
 type MinuteDetails struct {
 	Total      *int    `json:"total"`
-	Percentage *string `json:"percentage"`
+	Percentage *float32 `json:"percentage"`
 }
 
 type Biggest struct {
@@ -127,18 +127,6 @@ type Lineup struct {
 }
 
 type Cards struct {
-	Yellow CardDetails `json:"yellow"`
-	Red    CardDetails `json:"red"`
+	Yellow MinuteDistribution `json:"yellow"`
+	Red    MinuteDistribution `json:"red"`
 }
-
-type CardDetails struct {
-	ZeroToFifteen  MinuteDetails `json:"0-15" mapstructure:"0-15"`
-	SixteenToThirty MinuteDetails `json:"16-30" mapstructure:"16-30"`
-	ThirtyOneToFortyFive MinuteDetails `json:"31-45" mapstructure:"31-45"`
-	FortySixToSixty MinuteDetails `json:"46-60" mapstructure:"46-60"`
-	SixtyOneToSeventyFive MinuteDetails `json:"61-75" mapstructure:"61-75"`
-	SeventySixToNinety MinuteDetails `json:"76-90" mapstructure:"76-90"`
-	NinetyOneToOneHundredFive MinuteDetails `json:"91-105" mapstructure:"91-105"`
-	OneHundredSixToOneHundredTwenty MinuteDetails `json:"106-120" mapstructure:"106-120"`
-}
-
