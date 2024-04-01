@@ -51,7 +51,7 @@ type League struct {
 	Logo    string `json:"logo"`
 	Flag    string `json:"flag"`
 	Season  int    `json:"season"`
-	Round   string `json:"round"`
+	Round   *string `json:"round"`
 }
 
 type Teams struct {
@@ -63,7 +63,7 @@ type Team struct {
 	ID     int    `json:"id"`
 	Name   string `json:"name"`
 	Logo   string `json:"logo"`
-	Winner bool   `json:"winner"`
+	Winner *bool   `json:"winner"`
 }
 
 type Goals struct {

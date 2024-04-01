@@ -39,7 +39,7 @@ type Goals struct {
 type GoalDetails struct {
 	Total   GoalTotalDetails `json:"total"`
 	Average GoalAverage      `json:"average"`
-	Minute  GoalMinute       `json:"minute"`
+	Minute  MinuteDistribution       `json:"minute"`
 }
 
 type GoalTotalDetails struct {
@@ -49,12 +49,12 @@ type GoalTotalDetails struct {
 }
 
 type GoalAverage struct {
-	Home  string `json:"home"`
-	Away  string `json:"away"`
-	Total string `json:"total"`
+	Home  float32 `json:"home"`
+	Away  float32 `json:"away"`
+	Total float32 `json:"total"`
 }
 
-type GoalMinute struct {
+type MinuteDistribution struct {
 	ZeroToFifteen  MinuteDetails `json:"0-15" mapstructure:"0-15"`
 	SixteenToThirty MinuteDetails `json:"16-30" mapstructure:"16-30"`
 	ThirtyOneToFortyFive MinuteDetails `json:"31-45" mapstructure:"31-45"`

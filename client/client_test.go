@@ -215,6 +215,13 @@ func TestDoRequest(t *testing.T) {
 			RequestUrlWithoutHost: "/injuries",
 			ExpectError: true,
 		},
+		{
+			RequestStruct: fixture.Predictions{
+				FixtureID: 1049124,
+			},
+			SnapshotName: "fixture-predictions-bvb.json",
+			RequestUrlWithoutHost: "/predictions?fixture=1049124",
+		},
 	}
 
 	for _, requestToTest := range requestsToTest {
@@ -250,7 +257,7 @@ func TestDoRequest(t *testing.T) {
 		}
 
 		if string(expectedResponseContent) != string(actualResponseJson) {
-			t.Errorf("Expected %s\n\n\nGot %s", expectedResponseContent, actualResponseJson)
+			t.Errorf("Expected %s\n\n\nGot %s\nIn %s\n", expectedResponseContent, actualResponseJson, requestToTest.SnapshotName)
 		}
 	}
 }
