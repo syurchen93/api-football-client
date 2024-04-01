@@ -201,6 +201,20 @@ func TestDoRequest(t *testing.T) {
 			SnapshotName: "fixture-player-stats.json",
 			RequestUrlWithoutHost: "/fixtures/players?fixture=592872",
 		},
+		{
+			RequestStruct: misc.Injuries{
+				Date: time.Date(2024, 3, 31, 0, 0, 0, 0, time.UTC), 
+				LeagueID: 78,
+			},
+			SnapshotName: "injuries-date-bundes.json",
+			RequestUrlWithoutHost: "/injuries?date=2024-03-31&league=78",
+		},
+		{
+			RequestStruct: misc.Injuries{},
+			SnapshotName: "injuries-error.json",
+			RequestUrlWithoutHost: "/injuries",
+			ExpectError: true,
+		},
 	}
 
 	for _, requestToTest := range requestsToTest {
