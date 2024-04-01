@@ -105,7 +105,7 @@ type CardsStats struct {
 
 type PenaltyStats struct {
 	Won      int `json:"won"`
-	Commited int `json:"commited"`
+	Committed int `mapstructure:"commited" json:"committed"`
 	Scored   int `json:"scored"`
 	Missed   int `json:"missed"`
 	Saved    int `json:"saved"`
