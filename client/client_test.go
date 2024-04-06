@@ -62,6 +62,11 @@ func TestSetApiHost(t *testing.T) {
 func TestDoRequest(t *testing.T) {
 	var requestsToTest = []testRequestStruct{
 		{
+			RequestStruct:         player.PlayerInfo{LeagueID: 78, Season: 2022, Page: 3},
+			SnapshotName:          "player-info-bundes-2022.json",
+			RequestUrlWithoutHost: "/players?league=78&page=3&season=2022",
+		},
+		{
 			RequestStruct:         league.Country{},
 			SnapshotName:          "countries-full.json",
 			RequestUrlWithoutHost: "/countries",
