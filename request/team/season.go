@@ -5,14 +5,14 @@ import (
 	"github.com/syurchen93/api-football-client/response/leagues"
 )
 
-type Season struct {
+type TeamSeason struct {
 	Team int `mapstructure:"team" validate:"required"`
 }
 
-func (s Season) GetEndpoint() string {
+func (s TeamSeason) GetEndpoint() string {
 	return "teams/seasons"
 }
 
-func (s Season) GetResponseStruct() response.ResponseInterface {
+func (s TeamSeason) GetResponseStruct() response.ResponseInterface {
 	return leagues.SeasonYear{}
 }

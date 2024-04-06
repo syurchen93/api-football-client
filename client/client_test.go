@@ -17,6 +17,7 @@ import (
 	"github.com/syurchen93/api-football-client/request/fixture"
 	"github.com/syurchen93/api-football-client/request/league"
 	"github.com/syurchen93/api-football-client/request/misc"
+	"github.com/syurchen93/api-football-client/request/player"
 	"github.com/syurchen93/api-football-client/request/standings"
 	"github.com/syurchen93/api-football-client/request/team"
 	"github.com/syurchen93/api-football-client/response"
@@ -108,7 +109,7 @@ func TestDoRequest(t *testing.T) {
 			RequestUrlWithoutHost: "/timezone",
 		},
 		{
-			RequestStruct:         team.Season{Team: 33},
+			RequestStruct:         team.TeamSeason{Team: 33},
 			SnapshotName:          "team-seasons-mu.json",
 			RequestUrlWithoutHost: "/teams/seasons?team=33",
 		},
@@ -222,6 +223,11 @@ func TestDoRequest(t *testing.T) {
 			},
 			SnapshotName:          "fixture-predictions-bvb.json",
 			RequestUrlWithoutHost: "/predictions?fixture=1049124",
+		},
+		{
+			RequestStruct:         player.PlayerSeason{PlayerID: 2280},
+			SnapshotName:          "player-season-azpi.json",
+			RequestUrlWithoutHost: "/players/seasons?player=2280",
 		},
 	}
 
