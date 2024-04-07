@@ -6,14 +6,14 @@ import (
 )
 
 type Transfer struct {
-	ID     int `mapstucture:"id,omitempty"`
-	TeamID int `mapstructure:"team,omitempty"`
+	PlayerID int `mapstructure:"player,omitempty"`
+	TeamID   int `mapstructure:"team,omitempty"`
 }
 
 func (t Transfer) GetEndpoint() string {
 	return "transfers"
 }
 
-func (t Transfer) GetResponseStruc() response.ResponseInterface {
+func (t Transfer) GetResponseStruct() response.ResponseInterface {
 	return misc.Transfer{}
 }

@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"net/url"
 
-	//"os"
+	"os"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -92,7 +92,7 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 
 	defer httpResponse.Body.Close()
 	responseBody, err := io.ReadAll(httpResponse.Body)
-	//os.WriteFile("test/response/player-season-azpi.json", responseBody, 0644)
+	os.WriteFile("test/response/player-season-azpi.json", responseBody, 0644)
 	if err != nil {
 		return nil, err
 	}

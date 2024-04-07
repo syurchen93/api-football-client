@@ -3,18 +3,18 @@ package misc
 import "time"
 
 type Transfer struct {
-	Player    Player           `json:"player"`
+	Player    PlayerIdent      `json:"player"`
 	Update    time.Time        `json:"update"`
 	Transfers []TransferDetail `json:"transfers"`
 }
 
-type Player struct {
+type PlayerIdent struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
 
 type TransferDetail struct {
-	Date  string        `json:"date"`
+	Date  time.Time     `json:"date"`
 	Type  string        `json:"type"`
 	Teams TransferTeams `json:"teams"`
 }

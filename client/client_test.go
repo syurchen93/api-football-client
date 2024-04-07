@@ -67,6 +67,11 @@ func TestDoRequest(t *testing.T) {
 			RequestUrlWithoutHost: "/countries",
 		},
 		{
+			RequestStruct:         misc.Transfer{PlayerID: 123},
+			SnapshotName:          "transfer-pellegri.json",
+			RequestUrlWithoutHost: "/transfers?player=123",
+		},
+		{
 			RequestStruct:         league.Country{Code: "US"},
 			SnapshotName:          "countries-one.json",
 			RequestUrlWithoutHost: "/countries?code=US",
