@@ -7,13 +7,14 @@ import (
 	"net/http"
 	"net/url"
 
-	"os"
+	//"os"
 	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/martinlindhe/unit"
 	"github.com/syurchen93/api-football-client/common"
 	"github.com/syurchen93/api-football-client/request"
 	"github.com/syurchen93/api-football-client/request/fixture"
@@ -92,7 +93,7 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 
 	defer httpResponse.Body.Close()
 	responseBody, err := io.ReadAll(httpResponse.Body)
-	os.WriteFile("test/response/player-season-azpi.json", responseBody, 0644)
+	//os.WriteFile("test/response/misc-coach-Tuchel.json", responseBody, 0644)
 	if err != nil {
 		return nil, err
 	}
@@ -215,13 +216,17 @@ func ToTimeHookFunc() mapstructure.DecodeHookFunc {
 		}
 
 		if f.Kind() == reflect.String && t.Kind() == reflect.Int {
-			re := regexp.MustCompile("[^0-9]+")
-			cleanedString := re.ReplaceAllString(data.(string), "")
-			parsedInt, err := strconv.Atoi(cleanedString)
-			if err != nil {
-				return 0, err
-			}
-			return parsedInt, nil
+			return parseInt(data)
+		}
+
+		if f.Kind() == reflect.String && t.String() == "unit.Mass" {
+			intValue, _ := parseInt(data)
+			return unit.Mass(intValue), nil
+		}
+
+		if f.Kind() == reflect.String && t.String() == "unit.Length" {
+			intValue, _ := parseInt(data)
+			return unit.Length(intValue), nil
 		}
 
 		if t == reflect.TypeOf(fixtures.Lineup{}) {
@@ -379,4 +384,15 @@ func prepareGrid(gridString string) map[string]interface{} {
 	gridMap["column"] = gridSlice[1]
 
 	return gridMap
+}
+
+func parseInt(data interface{}) (int, error) {
+	re := regexp.MustCompile("[^0-9]+")
+	cleanedString := re.ReplaceAllString(data.(string), "")
+	parsedInt, err := strconv.Atoi(cleanedString)
+	if err != nil {
+		return 0, err
+	}
+
+	return parsedInt, nil
 }
