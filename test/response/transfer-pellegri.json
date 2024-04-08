@@ -1,0 +1,87 @@
+{
+    "get": "transfers",
+    "parameters": {
+        "player": "123"
+    },
+    "errors": [],
+    "results": 1,
+    "paging": {
+        "current": 1,
+        "total": 1
+    },
+    "response": [
+        {
+            "player": {
+                "id": 123,
+                "name": "P. Pellegri"
+            },
+            "update": "2024-04-05T10:05:45+00:00",
+            "transfers": [
+                {
+                    "date": "2022-07-01",
+                    "type": "N/A",
+                    "teams": {
+                        "in": {
+                            "id": 503,
+                            "name": "Torino",
+                            "logo": "https://media.api-sports.io/football/teams/503.png"
+                        },
+                        "out": {
+                            "id": 91,
+                            "name": "Monaco",
+                            "logo": "https://media.api-sports.io/football/teams/91.png"
+                        }
+                    }
+                },
+                {
+                    "date": "2022-01-27",
+                    "type": "Loan",
+                    "teams": {
+                        "in": {
+                            "id": 503,
+                            "name": "Torino",
+                            "logo": "https://media.api-sports.io/football/teams/503.png"
+                        },
+                        "out": {
+                            "id": 91,
+                            "name": "Monaco",
+                            "logo": "https://media.api-sports.io/football/teams/91.png"
+                        }
+                    }
+                },
+                {
+                    "date": "2021-08-25",
+                    "type": "Loan",
+                    "teams": {
+                        "in": {
+                            "id": 489,
+                            "name": "AC Milan",
+                            "logo": "https://media.api-sports.io/football/teams/489.png"
+                        },
+                        "out": {
+                            "id": 91,
+                            "name": "Monaco",
+                            "logo": "https://media.api-sports.io/football/teams/91.png"
+                        }
+                    }
+                },
+                {
+                    "date": "2018-01-27",
+                    "type": "N/A",
+                    "teams": {
+                        "in": {
+                            "id": 91,
+                            "name": "Monaco",
+                            "logo": "https://media.api-sports.io/football/teams/91.png"
+                        },
+                        "out": {
+                            "id": 495,
+                            "name": "Genoa",
+                            "logo": "https://media.api-sports.io/football/teams/495.png"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
