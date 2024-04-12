@@ -259,6 +259,11 @@ func TestDoRequest(t *testing.T) {
 			SnapshotName:          "player-top-assists-bundes-2023.json",
 			RequestUrlWithoutHost: "/players/topassists?league=78&season=2023",
 		},
+		{
+			RequestStruct:         player.TopYellowCards{LeagueID: 39, Season: 2023},
+			SnapshotName:          "player-top-yellow-epl-2023.json",
+			RequestUrlWithoutHost: "/players/topyellowcards?league=39&season=2023",
+		},
 	}
 
 	for _, requestToTest := range requestsToTest {

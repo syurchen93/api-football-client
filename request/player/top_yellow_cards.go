@@ -5,15 +5,15 @@ import (
 	"github.com/syurchen93/api-football-client/response/players"
 )
 
-type TopAssists struct {
+type TopYellowCards struct {
 	LeagueID int `mapstructure:"league" validate:"required"`
 	Season   int `mapstructure:"season" validate:"required,gte=1000,lte=9999"`
 }
 
-func (ta TopAssists) GetEndpoint() string {
-	return "players/topassists"
+func (tyc TopYellowCards) GetEndpoint() string {
+	return "players/topyellowcards"
 }
 
-func (ta TopAssists) GetResponseStruct() response.ResponseInterface {
+func (tyc TopYellowCards) GetResponseStruct() response.ResponseInterface {
 	return players.PlayerInfo{}
 }
