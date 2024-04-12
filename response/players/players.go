@@ -49,7 +49,7 @@ type Statistics struct {
 }
 
 type Games struct {
-	Appearances int     `json:"appearences"`
+	Appearances int     `mapstructure:"appearences"`
 	Lineups     int     `json:"lineups"`
 	Minutes     int     `json:"minutes"`
 	Number      int     `json:"number"`
