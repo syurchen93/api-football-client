@@ -62,11 +62,6 @@ func TestSetApiHost(t *testing.T) {
 func TestDoRequest(t *testing.T) {
 	var requestsToTest = []testRequestStruct{
 		{
-			RequestStruct:         misc.Coach{Search: "Tuche"},
-			SnapshotName:          "misc-coach-Tuchel.json",
-			RequestUrlWithoutHost: "/coachs?search=Tuche",
-		},
-		{
 			RequestStruct:         league.Country{},
 			SnapshotName:          "countries-full.json",
 			RequestUrlWithoutHost: "/countries",
@@ -248,6 +243,16 @@ func TestDoRequest(t *testing.T) {
 			RequestStruct:         player.PlayerInfo{LeagueID: 78, Season: 2022, Page: 3},
 			SnapshotName:          "player-info-bundes-2022.json",
 			RequestUrlWithoutHost: "/players?league=78&page=3&season=2022",
+		},
+		{
+			RequestStruct:         misc.Coach{Search: "Tuche"},
+			SnapshotName:          "misc-coach-Tuchel.json",
+			RequestUrlWithoutHost: "/coachs?search=Tuche",
+		},
+		{
+			RequestStruct:         player.TopScorer{LeagueID: 78, Season: 2023},
+			SnapshotName:          "player-top-scorer-bundes-2023.json",
+			RequestUrlWithoutHost: "/players/topscorers?league=78&season=2023",
 		},
 	}
 
