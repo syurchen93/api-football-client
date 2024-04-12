@@ -29,15 +29,6 @@ func main() {
 	}
 }
 ```
-The client is validating the request object for you so you don't vaste precious API call on requests that will never give a result
-### The project is open for pull requests 😊
+The client is validating the request object for you so you don't waste precious API call on requests that will never give a result. Some undocumented edge cases are not inclided, feel free to contribute 😊
 
-### Contribution guide
-- Implement request and response structures in proper folders according to API docs
-- Add annotations for json (de)serialization
-- Add validation annotation to the request according to API docs
-- Do a request using a test file provided above
-- Make sure that the response is mapped correctly
-- Re-run the request storing request snapshot in a proper dir (just uncomment lines writing response body to a snapshot file in client.go)
-- Add a test struct for your request in client_test.go
-- Run tests ```go test -v ./client``` to generate a serialization result snapshot
+The betting endpoints will not be implemented, because I don't support gambling. Fell free to fork and do those yourself
