@@ -274,6 +274,11 @@ func TestDoRequest(t *testing.T) {
 			SnapshotName:          "misc-trophies-musiala.json",
 			RequestUrlWithoutHost: "/trophies?player=181812",
 		},
+		{
+			RequestStruct:         misc.Sideilined{PlayerID: 181812},
+			SnapshotName:          "misc-sidelined-Musiala.json",
+			RequestUrlWithoutHost: "/sidelined?player=181812",
+		},
 	}
 
 	for _, requestToTest := range requestsToTest {
