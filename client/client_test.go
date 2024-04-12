@@ -269,6 +269,11 @@ func TestDoRequest(t *testing.T) {
 			SnapshotName:          "player-top-red-ligue1-2023.json",
 			RequestUrlWithoutHost: "/players/topredcards?league=61&season=2023",
 		},
+		{
+			RequestStruct:         misc.Trophies{PlayerID: 181812},
+			SnapshotName:          "misc-trophies-musiala.json",
+			RequestUrlWithoutHost: "/trophies?player=181812",
+		},
 	}
 
 	for _, requestToTest := range requestsToTest {

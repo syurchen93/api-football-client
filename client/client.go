@@ -93,7 +93,7 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 
 	defer httpResponse.Body.Close()
 	responseBody, err := io.ReadAll(httpResponse.Body)
-	//os.WriteFile("test/response/player-top-red-league1-2023.json", responseBody, 0644)
+	//os.WriteFile("test/response/misc-trophies-musiala.json", responseBody, 0644)
 	if err != nil {
 		return nil, err
 	}
