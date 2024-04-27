@@ -35,7 +35,7 @@ type testRequestStruct struct {
 
 func TestNewClient(t *testing.T) {
 	apiKey := "test"
-	client := NewClient(apiKey)
+	client := NewClient(apiKey, RateLimiterSettings{})
 	if client.apiKey != apiKey {
 		t.Errorf("Expected %s, got %s", apiKey, client.apiKey)
 	}
@@ -43,7 +43,7 @@ func TestNewClient(t *testing.T) {
 
 func TestSetBaseURL(t *testing.T) {
 	baseURL := "https://test.com"
-	client := NewClient("test")
+	client := NewClient("test", RateLimiterSettings{})
 	client.SetBaseURL(baseURL)
 	if client.baseURL != baseURL {
 		t.Errorf("Expected %s, got %s", baseURL, client.baseURL)
@@ -52,7 +52,7 @@ func TestSetBaseURL(t *testing.T) {
 
 func TestSetApiHost(t *testing.T) {
 	apiHost := "test.com"
-	client := NewClient("test")
+	client := NewClient("test", RateLimiterSettings{})
 	client.SetApiHost(apiHost)
 	if client.apiHost != apiHost {
 		t.Errorf("Expected %s, got %s", apiHost, client.apiHost)
@@ -331,7 +331,7 @@ func mockRequest(t *testing.T, testRequesData testRequestStruct) ([]response.Res
 	}))
 	defer ts.Close()
 
-	apiClient := NewClient("test")
+	apiClient := NewClient("test", RateLimiterSettings{})
 	apiClient.baseURL = ts.URL + "/"
 	apiClient.httpClient = ts.Client()
 

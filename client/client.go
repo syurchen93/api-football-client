@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"net/url"
 
-	//"os"
+	"context"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -27,6 +27,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/mitchellh/mapstructure"
+	"golang.org/x/time/rate"
 )
 
 var baseURL = "https://v3.football.api-sports.io/"
@@ -34,21 +35,41 @@ var apiHost = "v3.football.api-sports.io"
 var validate *validator.Validate
 var timeFormatShort = "2006-01-02"
 
-type Client struct {
-	apiKey     string
-	baseURL    string
-	apiHost    string
-	httpClient *http.Client
+type RateLimiterSettings struct {
+	Disabled     bool
+	RequestCount int
+	Seconds      int
 }
 
-func NewClient(apiKey string) *Client {
+type Client struct {
+	apiKey      string
+	baseURL     string
+	apiHost     string
+	httpClient  *http.Client
+	rateLimiter *rate.Limiter
+}
+
+func NewClient(apiKey string, rls RateLimiterSettings) *Client {
+	var rateLimiter *rate.Limiter
 	validate = validator.New(validator.WithRequiredStructEnabled())
+	if !rls.Disabled {
+		if rls.RequestCount == 0 {
+			rls.RequestCount = 10
+		}
+		if rls.Seconds == 0 {
+			rls.Seconds = 60
+		}
+
+		rl := rate.Every(time.Duration(rls.Seconds) * time.Second)
+		rateLimiter = rate.NewLimiter(rl, rls.RequestCount)
+	}
 
 	return &Client{
-		apiKey:     apiKey,
-		baseURL:    baseURL,
-		apiHost:    apiHost,
-		httpClient: &http.Client{},
+		apiKey:      apiKey,
+		baseURL:     baseURL,
+		apiHost:     apiHost,
+		httpClient:  &http.Client{},
+		rateLimiter: rateLimiter,
 	}
 }
 
@@ -72,6 +93,8 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 		return nil, err
 	}
 
+	c.applyRateLimit()
+
 	httpRequest, err := http.NewRequest(
 		"GET",
 		requestUrlWithParams,
@@ -93,12 +116,18 @@ func (c *Client) DoRequest(requestStruct request.RequestInterface) ([]response.R
 
 	defer httpResponse.Body.Close()
 	responseBody, err := io.ReadAll(httpResponse.Body)
-	//os.WriteFile("test/response/misc-sidelined-Tuchel.json", responseBody, 0644)
 	if err != nil {
 		return nil, err
 	}
 
 	return mapResponseToCorrectStruct(responseBody, requestStruct)
+}
+
+func (c *Client) applyRateLimit() {
+	if c.rateLimiter != nil {
+		ctx := context.Background()
+		_ = c.rateLimiter.Wait(ctx)
+	}
 }
 
 func (c Client) prepareUrlWithParams(requestStruct request.RequestInterface) (string, error) {

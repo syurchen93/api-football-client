@@ -6,6 +6,7 @@ require (
 	github.com/go-playground/validator/v10 v10.18.0
 	github.com/martinlindhe/unit v0.0.0-20230420213220-4adfd7d0a0d6
 	github.com/mitchellh/mapstructure v1.5.0
+	golang.org/x/time v0.5.0
 )
 
 require (

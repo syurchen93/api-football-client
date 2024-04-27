@@ -16,7 +16,7 @@ import (
 )
 
 func main() {
-	apiClient := client.NewClient("your secret")
+	apiClient := client.NewClient("your secret", client.RateLimiterSettings{})
 
 	getCountriesRequest := league.Country{}
 	getCountriesRequest.Code = "US"
@@ -30,5 +30,7 @@ func main() {
 }
 ```
 The client is validating the request object for you so you don't waste precious API call on requests that will never give a result. Some undocumented edge cases are not inclided, feel free to contribute 😊
+
+Since version 2.0 the rate limiter was added. Pass an empty settings object if you are using a free version of the API or customize it according to your plan.
 
 The betting endpoints will not be implemented, because I don't support gambling. Fell free to fork and do those yourself
