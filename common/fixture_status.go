@@ -25,19 +25,18 @@ const (
 )
 
 func (fs FixtureStatus) IsLive() bool {
-	return fs != Finished &&
-		fs != FinishedAfterExtra &&
-		fs != FinishedAfterPenalty &&
-		fs != Postponed &&
-		fs != Cancelled &&
-		fs != Abandoned &&
-		fs != TechnicalLoss &&
-		fs != WalkOver
+	return fs == InProgress || fs == FirstHalf ||
+		fs == SecondHalf || fs == ExtraTime || fs == Penalty
 }
 
-func (fs FixtureStatus) IsGameplayHappening() bool {
-	return fs == FirstHalf ||
-		fs == SecondHalf ||
-		fs == ExtraTime ||
-		fs == Penalty
+func (fs FixtureStatus) IsFinished() bool {
+	return fs == Finished ||
+		fs == FinishedAfterExtra ||
+		fs == FinishedAfterPenalty ||
+		fs == TechnicalLoss || fs == WalkOver ||
+		fs == Cancelled
+}
+
+func (fs FixtureStatus) IsInFuture() bool {
+	return fs == NotStarted || fs == TimeToBeDefined
 }
